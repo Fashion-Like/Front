@@ -2,8 +2,27 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const FormContainer = styled.div`
-height: 100vh;
-background-color: red;
+  height: 100vh;
+`;
+
+const FormBox = styled.div`
+  margin: 1rem;
+`;
+
+const Logo = styled.p`
+  color: #354a62;
+  font-family: Ubuntu;
+  text-align: center;
+
+  font-style: normal;
+  font-weight: 500;
+  font-size: 50px;
+  line-height: 57px;
+`;
+
+const Like = styled.span`
+  font-weight: 300;
+  color: #073992;
 `;
 
 const Label = styled.label`
@@ -89,6 +108,9 @@ const ButtonElement = styled.button`
 
 export {
   FormContainer,
+  FormBox,
+  Logo,
+  Like,
   Label,
   FormGroup,
   InputElement,
