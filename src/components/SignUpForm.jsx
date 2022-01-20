@@ -18,7 +18,7 @@ const SignUpForm = () => {
           ¡Regístrate!
         </h1>
 
-        <form action="">
+        <form action="" onSubmit={(e) => e.preventDefault()}>
           <Input
             label="Nombre"
             type="text"

@@ -8,7 +8,7 @@ const BaseButton = ({
   expanded = true
 }) => {
   return (
-    <ButtonElement outlined={outlined} expanded={expanded}>
+    <ButtonElement outlined={outlined} expanded={expanded} onClick={(e => e.preventDefault())}>
       {text}
     </ButtonElement>
   );
