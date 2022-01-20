@@ -1,9 +1,11 @@
 import BaseButton from "../ui/BaseButton";
 import Input from "../ui/Input";
+import { FormContainer } from "../assets/styledForm";
+
 
 const SignUpForm = () => {
   return (
-    <div>
+    <FormContainer>
       <h1>¡Regístrate!</h1>
 
       <form action="">
@@ -33,7 +35,7 @@ const SignUpForm = () => {
         />
         <BaseButton text="Registrarme" />
       </form>
-    </div>
+    </FormContainer>
   );
 };
 

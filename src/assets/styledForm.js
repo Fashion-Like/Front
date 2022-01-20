@@ -1,6 +1,11 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+const FormContainer = styled.div`
+height: 100vh;
+background-color: red;
+`;
+
 const Label = styled.label`
   display: block;
   padding: 0px 10px;
@@ -83,6 +88,7 @@ const ButtonElement = styled.button`
 `;
 
 export {
+  FormContainer,
   Label,
   FormGroup,
   InputElement,
