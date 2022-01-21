@@ -1,10 +1,14 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { register } from "../services/AuthService";
+import { setAccessToken } from "../stores/AccessTokenStore";
+import { login } from "../services/AuthService";
+import { useUser } from "../hooks/useUser";
 import BaseButton from "../ui/BaseButton";
 import Input from "../ui/Input";
 import BaseLogo from "../ui/BaseLogo";
 import { FormContainer, FormBox, ImgForm } from "../assets/styledForm";
 import backgroundForm from "../assets/images/bg-form.svg";
-import { useState } from "react";
-import { useUser } from "../hooks/useUser";
 
 const EMAIL_PATTERN =
   //eslint-disable-next-line
@@ -54,7 +58,9 @@ const validators = {
 };
 
 const SignUpForm = () => {
+  const history = useNavigate();
   const { doLogin } = useUser();
+
   const [state, setstate] = useState({
     fields: {
       name: "",
@@ -80,10 +86,18 @@ const SignUpForm = () => {
   };
 
   const onSubmit = (e) => {
-    const { fields } = state;
     e.preventDefault();
-    if (isValid()) {
-      doLogin({ email: fields.email, password: fields.password });
+    if (isValid) {
+      register(state.fields).then((response) => {
+        const fields = {email: state.fields.email,  password:state.fields.password}
+        login(fields).then((response) => {
+          setAccessToken(response.access_token);
+          doLogin().then(() => {
+            history("/");
+          });
+        });
+      })
+      .catch((e)=> console.log(e));
     }
   };
 
