@@ -15,14 +15,14 @@ const validators = {
   name: (value) => {
     let message;
     if (!value) {
-      message = "Name is required";
+      message = "Introduce tu nombre!";
     }
     return message;
   },
   email: (value) => {
     let message;
     if (!value) {
-      message = "Email is required";
+      message = "Introduce tu email!";
     } else if (!EMAIL_PATTERN.test(value)) {
       message = "Email is invalid";
     }
@@ -31,17 +31,25 @@ const validators = {
   password: (value) => {
     let message;
     if (!value) {
-      message = "Password is required";
+      message = "La contraseña es requerida";
     } else if (!NUM_PATTERN.test(value)) {
-      message = "Your password must contain at least one number";
+      message = "La contraseña debe contener al menos un número";
     } else if (!CAPITAL_PATTERN.test(value)) {
-      message = "Your password must contain at least one capital letter";
+      message = "La contraseña debe contener al menos una mayúscula";
     } else if (value && value.length < 8) {
-      message = "Your password must contain at least 8 characters";
+      message = "La contraseña debe contener un mínimo de 8 caracteres";
     }
     return message;
   },
-  confirmPassword: (value) => {}
+  confirmPassword: (value, password) => {
+    let message;
+    if (!password) {
+      message = "La contraseña es requerida";
+    } else if (value !== password) {
+      message = "La contraseña no coincide";
+    }
+    return message;
+  }
 };
 
 // Do: confirmPassword
@@ -61,8 +69,9 @@ const SignUpForm = () => {
       confirmPassword: validators.confirmPassword()
     }
   });
+  const { name, email, password, confirmPassword } = state.fields;
 
-  const [setTouched] = useState({});
+  const [Touched, setTouched] = useState({});
 
   const isValid = () => {
     const { errors } = state;
@@ -78,7 +87,10 @@ const SignUpForm = () => {
       },
       errors: {
         ...prevState.errors,
-        [name]: validators[name] && validators[name](value)
+        [name]:
+          validators[name] && name === "confirmPassword"
+            ? validators[name](value, password)
+            : validators[name](value)
       }
     }));
   };
@@ -99,7 +111,6 @@ const SignUpForm = () => {
     }));
   };
 
-  const { name, email, password, confirmPassword } = state.fields;
   const { errors } = state;
   return (
     <FormContainer>
@@ -162,11 +173,13 @@ const SignUpForm = () => {
             isvalid={errors.confirmPassword}
           />
 
-          <BaseButton text="Registrarme" disabled={isValid()} />
+          <BaseButton type="submit" text="Registrarme" disabled={isValid()} />
         </form>
         <p style={{ textAlign: "center", marginTop: "1.5rem" }}>
           ¿Ya te registraste?
-          <span style={{ fontWeight: "800" }}>Inicia Sesión</span>{" "}
+          <span style={{ fontWeight: "800", marginLeft: "0.6rem" }}>
+            Inicia Sesión
+          </span>{" "}
         </p>
       </FormBox>
     </FormContainer>
