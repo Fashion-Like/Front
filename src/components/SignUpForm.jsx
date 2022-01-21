@@ -4,6 +4,7 @@ import BaseLogo from "../ui/BaseLogo";
 import { FormContainer, FormBox, ImgForm } from "../assets/styledForm";
 import backgroundForm from "../assets/images/bg-form.svg";
 import { useState } from "react";
+import { useUser } from "../hooks/useUser";
 
 const EMAIL_PATTERN =
   //eslint-disable-next-line
@@ -53,6 +54,7 @@ const validators = {
 };
 
 const SignUpForm = () => {
+  const { doLogin } = useUser();
   const [state, setstate] = useState({
     fields: {
       name: "",
@@ -79,10 +81,9 @@ const SignUpForm = () => {
 
   const onSubmit = (e) => {
     const { fields } = state;
-    console.log(fields);
     e.preventDefault();
     if (isValid()) {
-
+      doLogin({ email: fields.email, password: fields.password });
     }
   };
 
@@ -135,7 +136,7 @@ const SignUpForm = () => {
         >
           ¡Regístrate!
         </h1>
-        <form action="" onSubmit={onSubmit}>
+        <form onSubmit={onSubmit}>
           <Input
             label="Nombre"
             type="text"
