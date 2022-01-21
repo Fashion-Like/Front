@@ -1,3 +1,6 @@
+import styled from "styled-components";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+
 import {
   Label,
   InputElement,
@@ -6,18 +9,21 @@ import {
   MessageError,
   InputContainer
 } from "../assets/styledForm";
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+
+const InputGroup = styled.div`
+  margin-bottom: 35px;
+`;
 
 const Input = ({ label, type, name, Message }) => {
   return (
-    <InputContainer >
+    <InputGroup>
       <Label htmlFor={name}>{label}</Label>
       <FormGroup>
         <InputElement type={type} name={name} />
         <IconCheck icon={faCheckCircle} />
       </FormGroup>
       <MessageError>{Message}</MessageError>
-    </InputContainer>
+    </InputGroup>
   );
 };
 
