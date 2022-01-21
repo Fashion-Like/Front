@@ -1,13 +1,19 @@
 import BaseButton from "../ui/BaseButton";
 import Input from "../ui/Input";
 import BaseLogo from "../ui/BaseLogo";
-import { FormContainer, FormBox } from "../assets/styledForm";
+import { FormContainer, FormBox, ImgForm,  } from "../assets/styledForm";
+import backgroundForm from "../assets/images/bg-form.svg"
 
 const SignUpForm = () => {
   return (
     <FormContainer>
-      <BaseLogo />
+
+      <ImgForm src={backgroundForm} alt="background-form" />
+
       <FormBox>
+
+        <BaseLogo />
+
         <h1
           style={{
             textAlign: "center",
@@ -19,6 +25,7 @@ const SignUpForm = () => {
         </h1>
 
         <form action="" onSubmit={(e) => e.preventDefault()}>
+
           <Input
             label="Nombre"
             type="text"
@@ -45,6 +52,8 @@ const SignUpForm = () => {
           />
           <BaseButton text="Registrarme" />
         </form>
+
+        <p style={{textAlign: "center", marginTop: "1.5rem"}} > ¿Ya te registraste? <span style={{fontWeight: "800"}}>Inicia Sesión</span> </p>
       </FormBox>
     </FormContainer>
   );

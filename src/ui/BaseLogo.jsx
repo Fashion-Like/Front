@@ -4,7 +4,7 @@ import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 const BaseLogo = () => {
   return (
     <Logo>
-      <IconLogo icon={faThumbsUp} size="2rem" color="#073992"/>
+      <IconLogo icon={faThumbsUp} size="xs" color="#073992"/>
       Fashion<Like>Like</Like>
     </Logo>
   );

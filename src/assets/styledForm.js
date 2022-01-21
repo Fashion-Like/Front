@@ -2,11 +2,54 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const FormContainer = styled.div`
-  height: 100vh;
+  max-width: 100%;
+  min-height: 100vh;
+  max-height: 100%;
+  font-size: 1rem;
+
+  @media (min-width: 768px){
+    background: linear-gradient(180deg, #2580AA 0%, rgba(0, 98, 143, 0.9375) 50%, #073992 100%);
+    display: grid; 
+    align-items: center;
+    justify-items: center;
+	}
+
+  @media (min-width: 1120px){
+    background: #FFFFFF;
+    display: grid;
+    grid-template-columns: 1fr 1fr 
+	}
 `;
 
+const ImgForm = styled.img`
+  min-width: 100%;
+  max-height: 100vh;
+  display: none;
+
+  @media (min-width: 1120px){
+		display: block;
+	}
+`
+const ImgLogo = styled.img`
+  width: 50%;
+
+  @media (min-width: 1120px){
+		width: 70%;
+	}
+`
+
 const FormBox = styled.div`
-  margin: 1rem;
+  padding: 2rem 1rem;
+
+  @media (min-width: 768px){
+    padding: 5rem;
+    background: #FFFFFF;
+    max-width: 60%;
+	}
+
+  @media (min-width: 1120px){
+    min-width: 100%;
+	}
 `;
 
 const Logo = styled.div`
@@ -19,7 +62,13 @@ const Logo = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 1.5rem;
+
+  @media (min-width: 1120px){
+		display: none;
+	}
 `;
+
 const IconLogo = styled(FontAwesomeIcon)`
   color: ${(props) => props.color};
   font-size: ${(props) => props.size};
@@ -34,7 +83,7 @@ const Like = styled.span`
 const Label = styled.label`
   display: block;
   padding: 0px 10px;
-  min-height: 30px;
+  min-height: 25px;
   cursor: pointer;
   color: #666666;
 `;
@@ -49,7 +98,7 @@ const InputElement = styled.input`
   border-radius: 3px;
   height: 45px;
   line-height: 45px;
-  padding: 0 10px 0 10px;
+  height: 50px;
   border: 2px solid #e5e5e5;
 
   &:focus {
@@ -79,17 +128,19 @@ const ButtonElement = styled.button`
   width: ${(props) => props.expanded && "100%"};
   border: ${(props) => (props.outlined ? "2px solid #073992" : "none")};
   border-radius: 9px;
-  line-height: 2.5rem;
+  line-height: 3rem;
   background: ${(props) =>
     props.outlined
       ? "transparent"
       : "linear-gradient(90deg, #073992 1.89%, #00628F 98.36%)"};
   color: ${(props) => (props.outlined ? "black" : "#FFFFFF")};
   font-weight: bold;
+  font-size: 0.9rem;
   cursor: pointer;
   transform: translate3d(0, 0, 0);
   transition: all 0.3s;
   touch-action: manipulation;
+  text-transform: uppercase;
 
   &:hover {
     background: linear-gradient(90deg, #003185 1.89%, #01567e 98.36%);
@@ -114,6 +165,8 @@ const ButtonElement = styled.button`
 
 export {
   FormContainer,
+  ImgForm,
+  ImgLogo,
   FormBox,
   Logo,
   IconLogo,
