@@ -14,15 +14,32 @@ const InputGroup = styled.div`
   margin-bottom: 35px;
 `;
 
-const Input = ({ label, type, name, Message }) => {
+const Input = ({
+  label,
+  type,
+  name,
+  message,
+  value,
+  onChange,
+  onBlur,
+  onFocus,
+  isvalid
+}) => {
   return (
     <InputGroup>
       <Label htmlFor={name}>{label}</Label>
       <FormGroup>
-        <InputElement type={type} name={name} />
-        <IconCheck icon={faCheckCircle} />
+        <InputElement
+          type={type}
+          name={name}
+          onChange={onChange}
+          onBlur={onBlur}
+          onFocus={onFocus}
+          value={value}
+        />
+        <IconCheck icon={faCheckCircle} isvalid={isvalid}/>
       </FormGroup>
-      <MessageError>{Message}</MessageError>
+      <MessageError>{message}</MessageError>
     </InputGroup>
   );
 };
