@@ -2,7 +2,7 @@ import BaseButton from "../ui/BaseButton";
 import Input from "../ui/Input";
 import BaseLogo from "../ui/BaseLogo";
 import { FormContainer, FormBox } from "../assets/styledForm";
-
+//prueba
 const SignUpForm = () => {
   return (
     <FormContainer>
