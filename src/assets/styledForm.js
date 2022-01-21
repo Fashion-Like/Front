@@ -3,10 +3,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const FormContainer = styled.div`
   height: 100vh;
+  @media (min-width: 1024px) {
+    background: linear-gradient(#00628f, #073992);
+    display: flex;
+    place-items: center;
+    justify-content: center;
+  }
 `;
 
 const FormBox = styled.div`
-  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3rem 1rem 1rem;
+  height: 100%;
+
+  @media (min-width: 1024px) {
+    padding: 2rem 1.6rem;
+    height: 48rem;
+    width: 450px;
+    background-color: #e7e7e7;
+  }
 `;
 
 const Logo = styled.div`
@@ -17,8 +34,8 @@ const Logo = styled.div`
   font-size: 50px;
   line-height: 57px;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 `;
 const IconLogo = styled(FontAwesomeIcon)`
   color: ${(props) => props.color};
@@ -29,6 +46,10 @@ const IconLogo = styled(FontAwesomeIcon)`
 const Like = styled.span`
   font-weight: 300;
   color: #073992;
+`;
+
+const InputContainer = styled.div`
+  margin-bottom: 8%;
 `;
 
 const Label = styled.label`
@@ -77,8 +98,9 @@ const IconCheck = styled(FontAwesomeIcon)`
 
 const ButtonElement = styled.button`
   width: ${(props) => props.expanded && "100%"};
+  height: 3rem;
   border: ${(props) => (props.outlined ? "2px solid #073992" : "none")};
-  border-radius: 9px;
+  border-radius: 1rem;
   line-height: 2.5rem;
   background: ${(props) =>
     props.outlined
@@ -118,6 +140,7 @@ export {
   Logo,
   IconLogo,
   Like,
+  InputContainer,
   Label,
   FormGroup,
   InputElement,

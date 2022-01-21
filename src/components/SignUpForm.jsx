@@ -6,13 +6,13 @@ import { FormContainer, FormBox } from "../assets/styledForm";
 const SignUpForm = () => {
   return (
     <FormContainer>
-      <BaseLogo />
       <FormBox>
+        <BaseLogo />
         <h1
           style={{
+            fontWeight: "800",
             textAlign: "center",
-            marginBottom: "2rem",
-            fontWeight: "800"
+            marginBottom: "1rem"
           }}
         >
           ¡Regístrate!
@@ -45,6 +45,22 @@ const SignUpForm = () => {
           />
           <BaseButton text="Registrarme" />
         </form>
+        <p
+          style={{
+            textAlign: "center"
+          }}
+        >
+          ¿Ya te registraste?{" "}
+          <span
+            style={{
+              bottom: "5px",
+              fontWeight: "800",
+              marginLeft: "0.3rem"
+            }}
+          >
+            Inicia sesión
+          </span>
+        </p>
       </FormBox>
     </FormContainer>
   );
