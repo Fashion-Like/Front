@@ -7,7 +7,6 @@ import {
   FormGroup,
   IconCheck,
   MessageError,
-  InputContainer
 } from "../assets/styledForm";
 
 const InputGroup = styled.div`

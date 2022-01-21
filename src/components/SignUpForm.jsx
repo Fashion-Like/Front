@@ -5,8 +5,8 @@ import { FormContainer, FormBox, ImgForm } from "../assets/styledForm";
 import backgroundForm from "../assets/images/bg-form.svg";
 import { useState } from "react";
 
-//eslint-disable-next-line
 const EMAIL_PATTERN =
+  //eslint-disable-next-line
   /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 const NUM_PATTERN = /[0-9]/;
 const CAPITAL_PATTERN = /[A-Z]/;
@@ -15,14 +15,14 @@ const validators = {
   name: (value) => {
     let message;
     if (!value) {
-      message = "Introduce tu nombre!";
+      message = "Introduce tu nombre";
     }
     return message;
   },
   email: (value) => {
     let message;
     if (!value) {
-      message = "Introduce tu email!";
+      message = "Introduce tu email";
     } else if (!EMAIL_PATTERN.test(value)) {
       message = "Email is invalid";
     }
@@ -43,16 +43,14 @@ const validators = {
   },
   confirmPassword: (value, password) => {
     let message;
-    if (!password) {
-      message = "La contraseña es requerida";
+    if (!value) {
+      message = "Confirma tu contraseña";
     } else if (value !== password) {
       message = "La contraseña no coincide";
     }
     return message;
   }
 };
-
-// Do: confirmPassword
 
 const SignUpForm = () => {
   const [state, setstate] = useState({
@@ -71,11 +69,21 @@ const SignUpForm = () => {
   });
   const { name, email, password, confirmPassword } = state.fields;
 
+  //eslint-disable-next-line
   const [Touched, setTouched] = useState({});
 
   const isValid = () => {
     const { errors } = state;
     return !Object.keys(errors).some((error) => errors[error]);
+  };
+
+  const onSubmit = (e) => {
+    const { fields } = state;
+    console.log(fields);
+    e.preventDefault();
+    if (isValid()) {
+
+    }
   };
 
   const onChange = (e) => {
@@ -127,7 +135,7 @@ const SignUpForm = () => {
         >
           ¡Regístrate!
         </h1>
-        <form action="" onSubmit={(e) => e.preventDefault()}>
+        <form action="" onSubmit={onSubmit}>
           <Input
             label="Nombre"
             type="text"
