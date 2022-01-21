@@ -5,10 +5,11 @@ const BaseButton = ({
   outlined = false,
   size,
   fill,
-  expanded = true
+  expanded = true,
+  disabled = true
 }) => {
   return (
-    <ButtonElement outlined={outlined} expanded={expanded} >
+    <ButtonElement outlined={outlined} expanded={expanded} disabled={!disabled}>
       {text}
     </ButtonElement>
   );

@@ -7,18 +7,23 @@ const FormContainer = styled.div`
   max-height: 100%;
   font-size: 1rem;
 
-  @media (min-width: 768px){
-    background: linear-gradient(180deg, #2580AA 0%, rgba(0, 98, 143, 0.9375) 50%, #073992 100%);
-    display: grid; 
+  @media (min-width: 768px) {
+    background: linear-gradient(
+      180deg,
+      #2580aa 0%,
+      rgba(0, 98, 143, 0.9375) 50%,
+      #073992 100%
+    );
+    display: grid;
     align-items: center;
     justify-items: center;
-	}
+  }
 
-  @media (min-width: 1120px){
-    background: #FFFFFF;
+  @media (min-width: 1120px) {
+    background: #ffffff;
     display: grid;
-    grid-template-columns: 1fr 1fr 
-	}
+    grid-template-columns: 1fr 1fr;
+  }
 `;
 
 const ImgForm = styled.img`
@@ -26,30 +31,30 @@ const ImgForm = styled.img`
   max-height: 100vh;
   display: none;
 
-  @media (min-width: 1120px){
-		display: block;
-	}
-`
+  @media (min-width: 1120px) {
+    display: block;
+  }
+`;
 const ImgLogo = styled.img`
   width: 50%;
 
-  @media (min-width: 1120px){
-		width: 70%;
-	}
-`
+  @media (min-width: 1120px) {
+    width: 70%;
+  }
+`;
 
 const FormBox = styled.div`
   padding: 2rem 1rem;
 
-  @media (min-width: 768px){
+  @media (min-width: 768px) {
     padding: 5rem;
-    background: #FFFFFF;
+    background: #ffffff;
     max-width: 60%;
-	}
+  }
 
-  @media (min-width: 1120px){
+  @media (min-width: 1120px) {
     min-width: 100%;
-	}
+  }
 `;
 
 const Logo = styled.div`
@@ -63,9 +68,9 @@ const Logo = styled.div`
   justify-content: center;
   margin-bottom: 1.5rem;
 
-  @media (min-width: 1120px){
-		display: none;
-	}
+  @media (min-width: 1120px) {
+    display: none;
+  }
 `;
 
 const IconLogo = styled(FontAwesomeIcon)`
@@ -113,12 +118,13 @@ const InputElement = styled.input`
 
 const MessageError = styled.p`
   font-size: 12px;
-  margin-bottom: 0;
+  margin: 0.3rem 1rem;
   color: red;
-  display: none;
+  // display: none;
 `;
 
 const IconCheck = styled(FontAwesomeIcon)`
+  color: ${(props) => (props.isvalid ? "#c4c4c4" : "green")};
   position: absolute;
   right: 10px;
   bottom: 14px;
@@ -153,7 +159,7 @@ const ButtonElement = styled.button`
 
   &:active {
     box-shadow: rgba(0, 0, 0, 0.1) 0 3px 6px 0, rgba(0, 0, 0, 0.1) 0 0 10px 0,
-      rgba(0, 0, 0, 0.1) 0 1px 4px -1px;
+    rgba(0, 0, 0, 0.1) 0 1px 4px -1px;
     transform: translateY(2px);
     transition-duration: 0.35s;
   }
@@ -164,6 +170,11 @@ const ButtonElement = styled.button`
 
   &:hover:after {
     opacity: 0.5;
+  }
+
+  &:disabled {
+    background: #d1d1d1;
+    cursor: no-drop;
   }
 `;
 
