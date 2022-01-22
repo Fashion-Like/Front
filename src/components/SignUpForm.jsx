@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "../services/AuthService";
 import { setAccessToken } from "../stores/AccessTokenStore";
@@ -21,6 +21,17 @@ const validators = {
     let message;
     if (!value) {
       message = "Introduce tu nombre";
+    } else if (NUM_PATTERN.test(value)) {
+      message = "No debe contener números";
+    }
+    return message;
+  },
+  lastname: (value) => {
+    let message;
+    if (!value) {
+      message = "Introduce tus apellidos";
+    } else if (NUM_PATTERN.test(value)) {
+      message = "No debe contener números";
     }
     return message;
   },
@@ -77,8 +88,16 @@ const SignUpForm = () => {
   });
   const { name, email, password, confirmPassword } = state.fields;
 
-  //eslint-disable-next-line
-  const [Touched, setTouched] = useState({});
+  const [touched, setTouched] = useState({});
+
+  const [showing, setShowing] = useState({
+    password: false,
+    confirmPassword: false,
+    replace(word) {
+      const characters = word.replace(/./g, "•").replace(/•$/, word[word.length - 1]);
+      return characters
+    }
+  });
 
   const isValid = () => {
     const { errors } = state;
@@ -88,18 +107,33 @@ const SignUpForm = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     if (isValid) {
-      register(state.fields).then((response) => {
-        const fields = {email: state.fields.email,  password:state.fields.password}
-        login(fields).then((response) => {
-          setAccessToken(response.access_token);
-          doLogin().then(() => {
-            history("/");
+      register(state.fields)
+        .then((response) => {
+          const fields = {
+            email: state.fields.email,
+            password: state.fields.password
+          };
+          login(fields).then((response) => {
+            setAccessToken(response.access_token);
+            doLogin().then(() => {
+              history("/");
+            });
           });
-        });
-      })
-      .catch((e)=> console.log(e));
+        })
+        .catch((e) => console.log(e));
     }
   };
+
+  useEffect(() => {
+    showing.password &&
+      setTimeout(() => {
+        setShowing({ ...showing, password: false });
+      }, 2000);
+    showing.confirmPassword &&
+      setTimeout(() => {
+        setShowing({ ...showing, confirmPassword: false });
+      }, 2000);
+  }, [showing]);
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -116,13 +150,16 @@ const SignUpForm = () => {
             : validators[name](value)
       }
     }));
+    if (name === "password" || name === "confirmPassword") {
+      setShowing({ ...showing, [name]: true });
+    }
   };
 
   const onBlur = (e) => {
     const { name } = e.target;
     setTouched((prevTouched) => ({
       ...prevTouched,
-      [name]: true
+      [name]: false
     }));
   };
 
@@ -130,7 +167,7 @@ const SignUpForm = () => {
     const { name } = e.target;
     setTouched((prevTouched) => ({
       ...prevTouched,
-      [name]: false
+      [name]: true
     }));
   };
 
@@ -159,7 +196,7 @@ const SignUpForm = () => {
             onChange={onChange}
             onBlur={onBlur}
             onFocus={onFocus}
-            message={errors.name}
+            message={touched.name && errors.name}
             isvalid={errors.name}
           />
           <Input
@@ -170,29 +207,33 @@ const SignUpForm = () => {
             onChange={onChange}
             onBlur={onBlur}
             onFocus={onFocus}
-            message={errors.email}
+            message={touched.email && errors.email}
             isvalid={errors.email}
           />
           <Input
             label="Contraseña"
-            type="password"
+            type={showing.password ? "text" : "password"}
             name="password"
-            value={password}
+            value={showing.password ? showing.replace(password) : password}
             onChange={onChange}
             onBlur={onBlur}
             onFocus={onFocus}
-            message={errors.password}
+            message={touched.password && errors.password}
             isvalid={errors.password}
           />
           <Input
             label="Confirmar contraseña"
-            type="password"
+            type={showing.confirmPassword ? "text" : "confirmPassword"}
             name="confirmPassword"
-            value={confirmPassword}
+            value={
+              showing.confirmPassword
+                ? showing.replace(confirmPassword)
+                : confirmPassword
+            }
             onChange={onChange}
             onBlur={onBlur}
             onFocus={onFocus}
-            message={errors.confirmPassword}
+            message={touched.confirmPassword && errors.confirmPassword}
             isvalid={errors.confirmPassword}
           />
 
