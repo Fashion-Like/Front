@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "../services/AuthService";
 import { setAccessToken } from "../stores/AccessTokenStore";
@@ -9,6 +9,9 @@ import Input from "../ui/Input";
 import BaseLogo from "../ui/BaseLogo";
 import { FormContainer, FormBox, ImgForm } from "../assets/styledForm";
 import backgroundForm from "../assets/images/bg-form.svg";
+
+const displayLastChar = 500;
+const displayLastCharDeleting = 100;
 
 const EMAIL_PATTERN =
   //eslint-disable-next-line
@@ -91,12 +94,10 @@ const SignUpForm = () => {
   const [touched, setTouched] = useState({});
 
   const [showing, setShowing] = useState({
-    password: false,
-    confirmPassword: false,
-    replace(word) {
-      const characters = word.replace(/./g, "•").replace(/•$/, word[word.length - 1]);
-      return characters
-    }
+    activepassword: false,
+    password: "",
+    activeconfirmPassword: false,
+    confirmPassword: ""
   });
 
   const isValid = () => {
@@ -124,34 +125,42 @@ const SignUpForm = () => {
     }
   };
 
-  useEffect(() => {
-    showing.password &&
-      setTimeout(() => {
-        setShowing({ ...showing, password: false });
-      }, 2000);
-    showing.confirmPassword &&
-      setTimeout(() => {
-        setShowing({ ...showing, confirmPassword: false });
-      }, 2000);
-  }, [showing]);
+  const showLastCharacter = (characters) => {
+    let result = "";
+    const num = characters.length - 1;
+    for (let i = 0; i < num; i++) {
+      result += "•";
+    }
+    return result + characters.slice(num);
+  };
 
   const onChange = (e) => {
     const { name, value } = e.target;
-    setstate((prevState) => ({
-      fields: {
-        ...prevState.fields,
-        [name]: value
-      },
-      errors: {
-        ...prevState.errors,
-        [name]:
-          validators[name] && name === "confirmPassword"
-            ? validators[name](value, password)
-            : validators[name](value)
-      }
-    }));
+    if (!showing.activepassword && !showing.activeconfirmPassword) {
+      setstate((prevState) => ({
+        fields: {
+          ...prevState.fields,
+          [name]: value
+        },
+        errors: {
+          ...prevState.errors,
+          [name]:
+            validators[name] && name === "confirmPassword"
+              ? validators[name](value, password)
+              : validators[name](value)
+        }
+      }));
+    }
     if (name === "password" || name === "confirmPassword") {
-      setShowing({ ...showing, [name]: true });
+      const time =
+        value === state.fields[name].slice(0, value.length)
+          ? displayLastCharDeleting
+          : displayLastChar;
+      setShowing({ [name]: showLastCharacter(value), [`active${name}`]: true });
+      setTimeout(() => {
+        setShowing({ ...showing, [`active${name}`]: false });
+        document.getElementById(name).focus();
+      }, time);
     }
   };
 
@@ -170,7 +179,6 @@ const SignUpForm = () => {
       [name]: true
     }));
   };
-
   const { errors } = state;
   return (
     <FormContainer>
@@ -211,10 +219,12 @@ const SignUpForm = () => {
             isvalid={errors.email}
           />
           <Input
+            id={"password"}
             label="Contraseña"
-            type={showing.password ? "text" : "password"}
+            type={showing.activepassword ? "text" : "password"}
             name="password"
-            value={showing.password ? showing.replace(password) : password}
+            value={showing.activepassword ? showing.password : password}
+            disabled={showing.activepassword}
             onChange={onChange}
             onBlur={onBlur}
             onFocus={onFocus}
@@ -222,14 +232,16 @@ const SignUpForm = () => {
             isvalid={errors.password}
           />
           <Input
+            id={"confirmPassword"}
             label="Confirmar contraseña"
-            type={showing.confirmPassword ? "text" : "confirmPassword"}
+            type={showing.activeconfirmPassword ? "text" : "password"}
             name="confirmPassword"
             value={
-              showing.confirmPassword
-                ? showing.replace(confirmPassword)
+              showing.activeconfirmPassword
+                ? showing.confirmPassword
                 : confirmPassword
             }
+            disabled={showing.activeconfirmPassword}
             onChange={onChange}
             onBlur={onBlur}
             onFocus={onFocus}
