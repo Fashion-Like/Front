@@ -1,12 +1,17 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { register } from "../services/AuthService";
+import { setAccessToken } from "../stores/AccessTokenStore";
+import { login } from "../services/AuthService";
+import { useUser } from "../hooks/useUser";
 import BaseButton from "../ui/BaseButton";
 import Input from "../ui/Input";
 import BaseLogo from "../ui/BaseLogo";
 import { FormContainer, FormBox, ImgForm } from "../assets/styledForm";
 import backgroundForm from "../assets/images/bg-form.svg";
-import { useState } from "react";
 
-//eslint-disable-next-line
 const EMAIL_PATTERN =
+  //eslint-disable-next-line
   /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 const NUM_PATTERN = /[0-9]/;
 const CAPITAL_PATTERN = /[A-Z]/;
@@ -15,14 +20,25 @@ const validators = {
   name: (value) => {
     let message;
     if (!value) {
-      message = "Name is required";
+      message = "Introduce tu nombre";
+    } else if (NUM_PATTERN.test(value)) {
+      message = "No debe contener números";
+    }
+    return message;
+  },
+  lastname: (value) => {
+    let message;
+    if (!value) {
+      message = "Introduce tus apellidos";
+    } else if (NUM_PATTERN.test(value)) {
+      message = "No debe contener números";
     }
     return message;
   },
   email: (value) => {
     let message;
     if (!value) {
-      message = "Email is required";
+      message = "Introduce tu email";
     } else if (!EMAIL_PATTERN.test(value)) {
       message = "Email is invalid";
     }
@@ -31,22 +47,31 @@ const validators = {
   password: (value) => {
     let message;
     if (!value) {
-      message = "Password is required";
+      message = "La contraseña es requerida";
     } else if (!NUM_PATTERN.test(value)) {
-      message = "Your password must contain at least one number";
+      message = "La contraseña debe contener al menos un número";
     } else if (!CAPITAL_PATTERN.test(value)) {
-      message = "Your password must contain at least one capital letter";
+      message = "La contraseña debe contener al menos una mayúscula";
     } else if (value && value.length < 8) {
-      message = "Your password must contain at least 8 characters";
+      message = "La contraseña debe contener un mínimo de 8 caracteres";
     }
     return message;
   },
-  confirmPassword: (value) => {}
+  confirmPassword: (value, password) => {
+    let message;
+    if (!value) {
+      message = "Confirma tu contraseña";
+    } else if (value !== password) {
+      message = "La contraseña no coincide";
+    }
+    return message;
+  }
 };
 
-// Do: confirmPassword
-
 const SignUpForm = () => {
+  const history = useNavigate();
+  const { doLogin } = useUser();
+
   const [state, setstate] = useState({
     fields: {
       name: "",
@@ -61,13 +86,54 @@ const SignUpForm = () => {
       confirmPassword: validators.confirmPassword()
     }
   });
+  const { name, email, password, confirmPassword } = state.fields;
 
-  const [setTouched] = useState({});
+  const [touched, setTouched] = useState({});
+
+  const [showing, setShowing] = useState({
+    password: false,
+    confirmPassword: false,
+    replace(word) {
+      const characters = word.replace(/./g, "•").replace(/•$/, word[word.length - 1]);
+      return characters
+    }
+  });
 
   const isValid = () => {
     const { errors } = state;
     return !Object.keys(errors).some((error) => errors[error]);
   };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if (isValid) {
+      register(state.fields)
+        .then((response) => {
+          const fields = {
+            email: state.fields.email,
+            password: state.fields.password
+          };
+          login(fields).then((response) => {
+            setAccessToken(response.access_token);
+            doLogin().then(() => {
+              history("/");
+            });
+          });
+        })
+        .catch((e) => console.log(e));
+    }
+  };
+
+  useEffect(() => {
+    showing.password &&
+      setTimeout(() => {
+        setShowing({ ...showing, password: false });
+      }, 2000);
+    showing.confirmPassword &&
+      setTimeout(() => {
+        setShowing({ ...showing, confirmPassword: false });
+      }, 2000);
+  }, [showing]);
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -78,20 +144,18 @@ const SignUpForm = () => {
       },
       errors: {
         ...prevState.errors,
-        [name]: validators[name] && validators[name](value)
+        [name]:
+          validators[name] && name === "confirmPassword"
+            ? validators[name](value, password)
+            : validators[name](value)
       }
     }));
+    if (name === "password" || name === "confirmPassword") {
+      setShowing({ ...showing, [name]: true });
+    }
   };
 
   const onBlur = (e) => {
-    const { name } = e.target;
-    setTouched((prevTouched) => ({
-      ...prevTouched,
-      [name]: true
-    }));
-  };
-
-  const onFocus = (e) => {
     const { name } = e.target;
     setTouched((prevTouched) => ({
       ...prevTouched,
@@ -99,7 +163,14 @@ const SignUpForm = () => {
     }));
   };
 
-  const { name, email, password, confirmPassword } = state.fields;
+  const onFocus = (e) => {
+    const { name } = e.target;
+    setTouched((prevTouched) => ({
+      ...prevTouched,
+      [name]: true
+    }));
+  };
+
   const { errors } = state;
   return (
     <FormContainer>
@@ -116,7 +187,7 @@ const SignUpForm = () => {
         >
           ¡Regístrate!
         </h1>
-        <form action="" onSubmit={(e) => e.preventDefault()}>
+        <form onSubmit={onSubmit}>
           <Input
             label="Nombre"
             type="text"
@@ -125,7 +196,7 @@ const SignUpForm = () => {
             onChange={onChange}
             onBlur={onBlur}
             onFocus={onFocus}
-            message={errors.name}
+            message={touched.name && errors.name}
             isvalid={errors.name}
           />
           <Input
@@ -136,37 +207,43 @@ const SignUpForm = () => {
             onChange={onChange}
             onBlur={onBlur}
             onFocus={onFocus}
-            message={errors.email}
+            message={touched.email && errors.email}
             isvalid={errors.email}
           />
           <Input
             label="Contraseña"
-            type="password"
+            type={showing.password ? "text" : "password"}
             name="password"
-            value={password}
+            value={showing.password ? showing.replace(password) : password}
             onChange={onChange}
             onBlur={onBlur}
             onFocus={onFocus}
-            message={errors.password}
+            message={touched.password && errors.password}
             isvalid={errors.password}
           />
           <Input
             label="Confirmar contraseña"
-            type="password"
+            type={showing.confirmPassword ? "text" : "confirmPassword"}
             name="confirmPassword"
-            value={confirmPassword}
+            value={
+              showing.confirmPassword
+                ? showing.replace(confirmPassword)
+                : confirmPassword
+            }
             onChange={onChange}
             onBlur={onBlur}
             onFocus={onFocus}
-            message={errors.confirmPassword}
+            message={touched.confirmPassword && errors.confirmPassword}
             isvalid={errors.confirmPassword}
           />
 
-          <BaseButton text="Registrarme" disabled={isValid()} />
+          <BaseButton type="submit" text="Registrarme" disabled={isValid()} />
         </form>
         <p style={{ textAlign: "center", marginTop: "1.5rem" }}>
           ¿Ya te registraste?
-          <span style={{ fontWeight: "800" }}>Inicia Sesión</span>{" "}
+          <span style={{ fontWeight: "800", marginLeft: "0.6rem" }}>
+            Inicia Sesión
+          </span>{" "}
         </p>
       </FormBox>
     </FormContainer>

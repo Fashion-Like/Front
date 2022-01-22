@@ -118,7 +118,7 @@ const InputElement = styled.input`
 
 const MessageError = styled.p`
   font-size: 12px;
-  margin: 0.3rem 1rem;
+  margin: 0.3rem 0.5rem;
   color: red;
   // display: none;
 `;
