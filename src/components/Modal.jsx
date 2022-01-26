@@ -9,8 +9,6 @@ const Modal = ({title, message, type, isOpenModal, setIsOpenModal}) => {
     setIsOpenModal(false)
   }
 
-  console.log(isOpenModal)
-
   return (
     <>
     {isOpenModal &&
