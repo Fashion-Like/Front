@@ -58,7 +58,7 @@ const LoginForm = () => {
 
         <Link
           style={{ display: "block",textAlign: "center", fontWeight: "600", color: "#0F0F0F", marginTop: "1.5rem",}}
-          to="/resetPassword">
+          to="/forgot-password">
           ¿Olvidó su contraseña?
         </Link>
 

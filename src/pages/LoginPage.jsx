@@ -8,9 +8,7 @@ const LoginPage = () => {
   return (
     <>
       <FormContainer>
-        <div>
-          <ImgForm src={backgroundForm} alt="background-form" />
-        </div>
+        <ImgForm src={backgroundForm} alt="background-form" />
         <LoginForm />
       </FormContainer>
     </>

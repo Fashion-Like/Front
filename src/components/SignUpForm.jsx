@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { register } from "../services/AuthService";
 import { setAccessToken } from "../stores/AccessTokenStore";
 import { login } from "../services/AuthService";
@@ -300,9 +300,11 @@ const SignUpForm = () => {
         </form>
         <p style={{ textAlign: "center", marginTop: "1.5rem" }}>
           ¿Ya te registraste?
-          <span style={{ fontWeight: "800", marginLeft: "0.6rem" }}>
-            Inicia Sesión
-          </span>{" "}
+          <Link
+              style={{ fontWeight: "800", marginLeft: "0.6rem", color: "#073992"}}
+              to="/login">
+              Inicia Sesión
+            </Link>
         </p>
       </FormBox>    
       
