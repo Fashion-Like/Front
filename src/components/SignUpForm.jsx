@@ -112,14 +112,17 @@ const SignUpForm = () => {
     return !Object.keys(errors).some((error) => errors[error]);
   };
 
-  const infoModal = {}
+  const  [ infoModal, setInfoModal ] = useState({
+    type: "",
+    title: "",
+    message: ""
+  });
 
   const onSubmit = (e) => {
 
     e.preventDefault();
 
     if (isValid) {
-      setIsOpenModal(!isOpenModal)
 
       register(state.fields)
 
@@ -129,13 +132,17 @@ const SignUpForm = () => {
             email: state.fields.email,
             password: state.fields.password
           };
-          setIsOpenModal(true)
+
           login(fields).then((response) => {
 
-            infoModal.type = "success"
-            infoModal.title = "¡Felicidades!"
-            infoModal.message = "Tu cuenta se ha creado de manera exitosa"
-          
+            setInfoModal({
+              type: "success",
+              title: "¡Felicidades!",
+              message: "Tu cuenta se ha creado de manera exitosa"
+            })
+
+            setIsOpenModal(true)
+
             setAccessToken(response.access_token);
             doLogin().then(() => {
               history("/");
@@ -144,13 +151,12 @@ const SignUpForm = () => {
         })
 
         .catch((e) => {
+          setInfoModal({
+            type: "error",
+            title: "¡Ooooops!",
+            message: e.message
+          })
           setIsOpenModal(true)
-          console.log(e)
-
-          infoModal.type = "error"
-          infoModal.title = "¡Ooooops!"
-          infoModal.message = "Error"
-
         });
     }
 
@@ -298,7 +304,8 @@ const SignUpForm = () => {
             Inicia Sesión
           </span>{" "}
         </p>
-      </FormBox>      
+      </FormBox>    
+      
       <Modal
         type={infoModal.type}
         title={infoModal.title}

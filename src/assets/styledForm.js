@@ -28,6 +28,7 @@ const FormContainer = styled.div`
 const ImgForm = styled.img`
   width: 100%;
   max-height: 100vh;
+  min-height: 100vh;
   display: none;
 
   @media (min-width: 1120px) {
@@ -108,7 +109,7 @@ const InputElement = styled.input`
   border-radius: 3px;
   max-height: 40px;
   height: 40px;
-  border: 2px solid #E5E5E5;
+  border: 1px solid #E5E5E5;
 
   &:focus {
     border: 2px solid #6aa5ea;
@@ -180,9 +181,16 @@ const ButtonElement = styled.button`
   }
 `;
 
+const FormForgotPassword = styled.div`
+  line-height: 1.5;
+  margin: 0 auto;
+  max-width: 500px;
+`;
+
 export {
   FormContainer,
   ImgForm,
+  FormForgotPassword,
   ImgLogo,
   FormBox,
   Logo,
