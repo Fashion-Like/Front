@@ -10,7 +10,7 @@ import {
 } from "../assets/styledForm";
 
 const InputGroup = styled.div`
-  margin-bottom: 35px;
+  margin-bottom: 25px;
 `;
 
 const Input = ({

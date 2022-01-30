@@ -7,8 +7,9 @@ import { useUser } from "../hooks/useUser";
 import BaseButton from "../ui/BaseButton";
 import Input from "../ui/Input";
 import BaseLogo from "../ui/BaseLogo";
-import { FormContainer, FormBox, ImgForm } from "../assets/styledForm";
-import backgroundForm from "../assets/images/bg-form.svg";
+import { FormBox } from "../assets/styledForm";
+import Modal from "../components/Modal";
+
 
 const displayLastChar = 500;
 const displayLastCharDeleting = 100;
@@ -78,18 +79,21 @@ const SignUpForm = () => {
   const [state, setstate] = useState({
     fields: {
       name: "",
+      lastname: "",
       email: "",
       password: "",
       confirmPassword: ""
     },
     errors: {
       name: validators.name(),
+      lastname: validators.lastname(),
       email: validators.email(),
       password: validators.password(),
       confirmPassword: validators.confirmPassword()
     }
   });
-  const { name, email, password, confirmPassword } = state.fields;
+
+  const { name, lastname, email, password, confirmPassword } = state.fields;
 
   const [touched, setTouched] = useState({});
 
@@ -100,29 +104,62 @@ const SignUpForm = () => {
     confirmPassword: ""
   });
 
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
+
   const isValid = () => {
     const { errors } = state;
     return !Object.keys(errors).some((error) => errors[error]);
   };
 
+  const  [ infoModal, setInfoModal ] = useState({
+    type: "",
+    title: "",
+    message: ""
+  });
+
   const onSubmit = (e) => {
+
     e.preventDefault();
+
     if (isValid) {
+
       register(state.fields)
+
         .then((response) => {
+          console.log(response)
           const fields = {
             email: state.fields.email,
             password: state.fields.password
           };
+
           login(fields).then((response) => {
+
+            setInfoModal({
+              type: "success",
+              title: "¡Felicidades!",
+              message: "Tu cuenta se ha creado de manera exitosa"
+            })
+
+            setIsOpenModal(true)
+
             setAccessToken(response.access_token);
             doLogin().then(() => {
               history("/");
             });
           });
         })
-        .catch((e) => console.log(e));
+
+        .catch((e) => {
+          setInfoModal({
+            type: "error",
+            title: "¡Ooooops!",
+            message: e.message
+          })
+          setIsOpenModal(true)
+        });
     }
+
   };
 
   const showLastCharacter = (characters) => {
@@ -180,10 +217,9 @@ const SignUpForm = () => {
     }));
   };
   const { errors } = state;
-  return (
-    <FormContainer>
-      <ImgForm src={backgroundForm} alt="background-form" />
 
+  return (
+    <>
       <FormBox>
         <BaseLogo />
         <h1
@@ -197,7 +233,7 @@ const SignUpForm = () => {
         </h1>
         <form onSubmit={onSubmit}>
           <Input
-            label="Nombre"
+            label="Nombres"
             type="text"
             name="name"
             value={name}
@@ -206,6 +242,17 @@ const SignUpForm = () => {
             onFocus={onFocus}
             message={touched.name && errors.name}
             isvalid={errors.name}
+          />
+          <Input
+            label="Apellidos"
+            type="text"
+            name="lastname"
+            value={lastname}
+            onChange={onChange}
+            onBlur={onBlur}
+            onFocus={onFocus}
+            message={touched.lastname && errors.lastname}
+            isvalid={errors.lastname}
           />
           <Input
             label="Correo electrónico"
@@ -257,8 +304,16 @@ const SignUpForm = () => {
             Inicia Sesión
           </span>{" "}
         </p>
-      </FormBox>
-    </FormContainer>
+      </FormBox>    
+      
+      <Modal
+        type={infoModal.type}
+        title={infoModal.title}
+        message={infoModal.message}
+        setIsOpenModal={setIsOpenModal}
+        isOpenModal={isOpenModal}
+      />
+    </>
   );
 };
 

@@ -2,10 +2,9 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const FormContainer = styled.div`
-  max-width: 100%;
+  min-width: 100%;
   min-height: 100vh;
-  max-height: 100%;
-  font-size: 1rem;
+  font-size: 0.85rem;
 
   @media (min-width: 768px) {
     background: linear-gradient(
@@ -21,14 +20,15 @@ const FormContainer = styled.div`
 
   @media (min-width: 1120px) {
     background: #ffffff;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: start;
   }
 `;
 
 const ImgForm = styled.img`
-  min-width: 100%;
+  width: 100%;
   max-height: 100vh;
+  min-height: 100vh;
   display: none;
 
   @media (min-width: 1120px) {
@@ -50,10 +50,13 @@ const FormBox = styled.div`
     padding: 5rem;
     background: #ffffff;
     max-width: 60%;
+    border-radius: 10px;
   }
 
   @media (min-width: 1120px) {
-    min-width: 100%;
+    min-width: 90%;
+    padding-top: 3rem;
+    max-height: 100vh;
   }
 `;
 
@@ -91,7 +94,7 @@ const InputContainer = styled.div`
 const Label = styled.label`
   display: block;
   padding: 0px 10px;
-  min-height: 25px;
+  min-height: 20px;
   cursor: pointer;
   color: #666666;
 `;
@@ -104,16 +107,16 @@ const FormGroup = styled.div`
 const InputElement = styled.input`
   width: 100%;
   border-radius: 3px;
-  height: 45px;
-  line-height: 45px;
-  height: 50px;
-  border: 2px solid #e5e5e5;
+  max-height: 40px;
+  height: 40px;
+  border: 1px solid #E5E5E5;
 
   &:focus {
-    border: 3px solid #6aa5ea;
+    border: 2px solid #6aa5ea;
     outline: none;
     box-shadow: 3px 0px 30px rgba(163, 163 163 0.4);
   }
+
 `;
 
 const MessageError = styled.p`
@@ -124,7 +127,7 @@ const MessageError = styled.p`
 `;
 
 const IconCheck = styled(FontAwesomeIcon)`
-  color: ${(props) => (props.isvalid ? "#c4c4c4" : "green")};
+  color: ${(props) => (props.isvalid ? "#fff" : "green")};
   position: absolute;
   right: 10px;
   bottom: 14px;
@@ -145,7 +148,7 @@ const ButtonElement = styled.button`
       : "linear-gradient(90deg, #073992 1.89%, #00628F 98.36%)"};
   color: ${(props) => (props.outlined ? "black" : "#FFFFFF")};
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: 0.90rem;
   cursor: pointer;
   transform: translate3d(0, 0, 0);
   transition: all 0.3s;
@@ -174,13 +177,20 @@ const ButtonElement = styled.button`
 
   &:disabled {
     background: #d1d1d1;
-    cursor: no-drop;
+    cursor: not-allowed;
   }
+`;
+
+const FormForgotPassword = styled.div`
+  line-height: 1.5;
+  margin: 0 auto;
+  max-width: 500px;
 `;
 
 export {
   FormContainer,
   ImgForm,
+  FormForgotPassword,
   ImgLogo,
   FormBox,
   Logo,
@@ -192,5 +202,5 @@ export {
   InputElement,
   MessageError,
   IconCheck,
-  ButtonElement
+  ButtonElement,
 };
