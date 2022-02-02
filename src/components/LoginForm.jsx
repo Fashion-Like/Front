@@ -1,16 +1,14 @@
-import { Link } from "react-router-dom";
-import BaseButton from "../ui/BaseButton";
-import Input from "../ui/Input";
-import BaseLogo from "../ui/BaseLogo";
-import { FormBox } from "../assets/styledForm";
+import { Link } from 'react-router-dom';
+import BaseButton from '../ui/BaseButton';
+import Input from '../ui/Input';
+import BaseLogo from '../ui/BaseLogo';
+import { FormBox } from '../assets/css/styledForm';
 
 const LoginForm = () => {
-
   const onSubmit = (e) => {
-
     e.preventDefault();
     console.log('click');
-  }
+  };
 
   return (
   <>
@@ -20,16 +18,15 @@ const LoginForm = () => {
 
       <h1
         style={{
-          fontWeight: "800",
-          textAlign: "center",
-          marginBottom: "1.5rem"
+          fontWeight: '800',
+          textAlign: 'center',
+          marginBottom: '1.5rem'
         }}
       >
         ¡Inicia Sesión!
       </h1>
 
       <form
-      
       onSubmit={onSubmit}>
         <Input
           label="Correo electrónico"
@@ -42,22 +39,22 @@ const LoginForm = () => {
           name="password"
         />
 
-        <p 
-          style={{ textAlign: "center", marginTop: "1.5rem", marginBottom: "1.5rem" }}>
+        <p
+          style={{ textAlign: 'center', marginTop: '1.5rem', marginBottom: '1.5rem' }}>
           ¿No estás registrado?
           <Link
-              style={{ fontWeight: "800", marginLeft: "0.6rem", color: "#073992"}}
+              style={{ fontWeight: '800', marginLeft: '0.6rem', color: '#073992' }}
               to="/signup">
               Regístrate.
           </Link>
         </p>
 
-        <BaseButton 
-        type="submit" 
+        <BaseButton
+        type="submit"
         text="INICIAR SESIÓN" />
 
         <Link
-          style={{ display: "block",textAlign: "center", fontWeight: "600", color: "#0F0F0F", marginTop: "1.5rem",}}
+          style={{ display: 'block', textAlign: 'center', fontWeight: '600', color: '#0F0F0F', marginTop: '1.5rem' }}
           to="/forgot-password">
           ¿Olvidó su contraseña?
         </Link>
@@ -66,7 +63,7 @@ const LoginForm = () => {
 
     </FormBox>
   </>
-  )
+  );
 };
 
 export default LoginForm;

@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import styled from 'styled-components';
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 import {
   Label,
@@ -7,7 +7,7 @@ import {
   FormGroup,
   IconCheck,
   MessageError
-} from "../assets/styledForm";
+} from '../assets/css/styledForm';
 
 const InputGroup = styled.div`
   margin-bottom: 25px;
