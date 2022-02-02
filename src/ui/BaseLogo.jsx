@@ -1,5 +1,5 @@
-import { Logo, Like, IconLogo } from "../assets/styledForm";
-import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import { Logo, Like, IconLogo } from '../assets/css/styledForm';
+import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 const BaseLogo = () => {
   return (

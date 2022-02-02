@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const FormContainer = styled.div`
   min-width: 100%;
@@ -127,7 +127,7 @@ const MessageError = styled.p`
 `;
 
 const IconCheck = styled(FontAwesomeIcon)`
-  color: ${(props) => (props.isvalid ? "#fff" : "green")};
+  color: ${(props) => (props.isvalid ? '#fff' : 'green')};
   position: absolute;
   right: 10px;
   bottom: 14px;
@@ -137,16 +137,16 @@ const IconCheck = styled(FontAwesomeIcon)`
 `;
 
 const ButtonElement = styled.button`
-  width: ${(props) => props.expanded && "100%"};
+  width: ${(props) => props.expanded && '100%'};
   height: 3rem;
-  border: ${(props) => (props.outlined ? "2px solid #073992" : "none")};
+  border: ${(props) => (props.outlined ? '2px solid #073992' : 'none')};
   border-radius: 9px;
   line-height: 3rem;
   background: ${(props) =>
     props.outlined
-      ? "transparent"
-      : "linear-gradient(90deg, #073992 1.89%, #00628F 98.36%)"};
-  color: ${(props) => (props.outlined ? "black" : "#FFFFFF")};
+      ? 'transparent'
+      : 'linear-gradient(90deg, #073992 1.89%, #00628F 98.36%)'};
+  color: ${(props) => (props.outlined ? 'black' : '#FFFFFF')};
   font-weight: bold;
   font-size: 0.90rem;
   cursor: pointer;
@@ -202,5 +202,5 @@ export {
   InputElement,
   MessageError,
   IconCheck,
-  ButtonElement,
+  ButtonElement
 };

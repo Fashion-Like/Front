@@ -1,4 +1,4 @@
-import { ButtonElement } from "../assets/styledForm";
+import { ButtonElement } from '../assets/css/styledForm';
 
 const BaseButton = ({
   type,
