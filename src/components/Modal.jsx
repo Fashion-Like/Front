@@ -17,7 +17,7 @@ const Modal = ({ title, message, type, isOpenModal, setIsOpenModal }) => {
           <HeadModal>
             <button
               onClick={closeModal}
-            >;
+            >
             <FontAwesomeIcon icon={ faTimes } />
             </button>
             <div>
