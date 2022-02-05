@@ -25,7 +25,8 @@ const Input = ({
   onFocus,
   isvalid,
   disabled,
-  autofocus
+  autofocus,
+  iconCheck = true
 }) => {
   return (
     <InputGroup>
@@ -42,7 +43,7 @@ const Input = ({
           disabled={disabled}
           autoFocus={autofocus}
         />
-        <IconCheck icon={faCheckCircle} isvalid={isvalid} />
+        {iconCheck && <IconCheck icon={faCheckCircle} isvalid={isvalid} />}
       </FormGroup>
       <MessageError>{message}</MessageError>
     </InputGroup>

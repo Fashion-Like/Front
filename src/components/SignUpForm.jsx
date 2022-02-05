@@ -1,16 +1,18 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { register } from "../services/AuthService";
+import { setAccessToken } from "../stores/AccessTokenStore";
 import { register, login } from '../services/AuthService';
-import { setAccessToken } from '../stores/AccessTokenStore';
-import { useUser } from '../hooks/useUser';
-import BaseButton from '../ui/BaseButton';
-import Input from '../ui/Input';
-import BaseLogo from '../ui/BaseLogo';
-import { FormBox } from '../assets/css/styledForm';
-import Modal from '../components/Modal';
+import { useUser } from "../hooks/useUser";
+import BaseButton from "../ui/BaseButton";
+import Input from "../ui/Input";
+import BaseLogo from "../ui/BaseLogo";
+import { FormBox } from "../assets/styledForm";
+import Modal from "../components/Modal";
 
-const displayLastChar = 500;
-const displayLastCharDeleting = 100;
+const displayLastChar = 200;
+const displayLastCharDeleting = 60;
+
 
 const EMAIL_PATTERN =
   // eslint-disable-next-line
@@ -110,9 +112,9 @@ const SignUpForm = () => {
   };
 
   const [infoModal, setInfoModal] = useState({
-    type: '',
-    title: '',
-    message: ''
+    type: "",
+    title: "",
+    message: ""
   });
 
   const onSubmit = (e) => {
@@ -120,9 +122,7 @@ const SignUpForm = () => {
 
     if (isValid) {
       register(state.fields)
-
         .then((response) => {
-          console.log(response);
           const fields = {
             email: state.fields.email,
             password: state.fields.password
@@ -130,9 +130,9 @@ const SignUpForm = () => {
 
           login(fields).then((response) => {
             setInfoModal({
-              type: 'success',
-              title: '¡Felicidades!',
-              message: 'Tu cuenta se ha creado de manera exitosa'
+              type: "success",
+              title: "¡Felicidades!",
+              message: "Tu cuenta se ha creado de manera exitosa"
             });
 
             setIsOpenModal(true);
@@ -291,13 +291,24 @@ const SignUpForm = () => {
 
           <BaseButton type="submit" text="Registrarme" disabled={isValid()} />
         </form>
-        <p style={{ textAlign: 'center', marginTop: '1.5rem' }}>
+        <p
+          style={{
+            textAlign: "center",
+            marginTop: "1.5rem",
+            marginBottom: "1.5rem"
+          }}
+        >
           ¿Ya te registraste?
           <Link
-              style={{ fontWeight: '800', marginLeft: '0.6rem', color: '#073992' }}
-              to="/login">
-              Inicia Sesión
-            </Link>
+            style={{
+              fontWeight: "800",
+              marginLeft: "0.6rem",
+              color: "#073992"
+            }}
+            to="/login"
+          >
+            Inicia Sesión
+          </Link>
         </p>
       </FormBox>
 
