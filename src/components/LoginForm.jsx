@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import BaseButton from "../ui/BaseButton";
 import Input from "../ui/Input";
 import BaseLogo from "../ui/BaseLogo";
-import { FormBox } from "../assets/styledForm";
+import { FormBox } from "../assets/css/styledForm";
 import { useUser } from "../hooks/useUser";
 import { useState } from "react";
 import { setAccessToken } from "../stores/AccessTokenStore";

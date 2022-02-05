@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { register } from "../services/AuthService";
 import { setAccessToken } from "../stores/AccessTokenStore";
 import { register, login } from '../services/AuthService';
 import { useUser } from "../hooks/useUser";
 import BaseButton from "../ui/BaseButton";
 import Input from "../ui/Input";
 import BaseLogo from "../ui/BaseLogo";
-import { FormBox } from "../assets/styledForm";
+import { FormBox } from "../assets/css/styledForm";
 import Modal from "../components/Modal";
 
 const displayLastChar = 200;
