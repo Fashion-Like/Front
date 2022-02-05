@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const Backdrop = styled.div`
   width: 100vw;
@@ -12,7 +12,7 @@ const Backdrop = styled.div`
   display: grid;
   align-items: center;
   justify-items: center;
-`
+`;
 
 const ContainerModal = styled.div`
   position: fixed;
@@ -22,7 +22,7 @@ const ContainerModal = styled.div`
   height: 350px;
   border-radius: 5px;
   padding: 20px;
-`
+`;
 
 const HeadModal = styled.div`
   display: flex;
@@ -40,8 +40,7 @@ const HeadModal = styled.div`
     border: none;
     cursor: pointer;
   }
-
-`
+`;
 
 const BodyModal = styled.div`
   padding-top: 2rem; 
@@ -65,11 +64,11 @@ const BodyModal = styled.div`
       opacity: 0.97;
     }
   }
-`
+`;
 
 export {
   Backdrop,
   ContainerModal,
   HeadModal,
-  BodyModal,
-}
+  BodyModal
+};
