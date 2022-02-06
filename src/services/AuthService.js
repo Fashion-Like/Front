@@ -5,7 +5,7 @@ const http = create({
 })
 
 export const login = (body) => {
-return http.post('/account/login', body)
+    return http.post('/account/login', body)
 }
 export const register = (body) => {
 return http.post('/account/register', body)

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { setAccessToken } from "../stores/AccessTokenStore";
-import { register, login } from '../services/AuthService';
+import { register, login } from "../services/AuthService";
 import { useUser } from "../hooks/useUser";
 import BaseButton from "../ui/BaseButton";
 import Input from "../ui/Input";
@@ -12,66 +12,65 @@ import Modal from "../components/Modal";
 const displayLastChar = 200;
 const displayLastCharDeleting = 60;
 
-
 const EMAIL_PATTERN =
   // eslint-disable-next-line
   /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 const NUM_PATTERN = /[0-9]/;
 const CAPITAL_PATTERN = /[A-Z]/;
 const LOWERCASE_PATTERN = /[a-z]/;
-const NONALPHANUMERIC_PATTERN = /[@$!%*#?&]/;
+const NONALPHANUMERIC_PATTERN = /[@$!%*#?&+-]/;
 
 const validators = {
   firstName: (value) => {
     let message;
     if (!value) {
-      message = 'Introduce tu nombre';
+      message = "Introduce tu nombre";
     } else if (NUM_PATTERN.test(value)) {
-      message = 'No debe contener números';
+      message = "No debe contener números";
     }
     return message;
   },
   lastName: (value) => {
     let message;
     if (!value) {
-      message = 'Introduce tus apellidos';
+      message = "Introduce tus apellidos";
     } else if (NUM_PATTERN.test(value)) {
-      message = 'No debe contener números';
+      message = "No debe contener números";
     }
     return message;
   },
   email: (value) => {
     let message;
     if (!value) {
-      message = 'Introduce tu email';
+      message = "Introduce tu email";
     } else if (!EMAIL_PATTERN.test(value)) {
-      message = 'Email is invalid';
+      message = "Email is invalid";
     }
     return message;
   },
   password: (value) => {
     let message;
     if (!value) {
-      message = 'La contraseña es requerida';
+      message = "La contraseña es requerida";
     } else if (!NUM_PATTERN.test(value)) {
-      message = 'La contraseña debe contener al menos un número';
+      message = "La contraseña debe contener al menos un número";
     } else if (!CAPITAL_PATTERN.test(value)) {
-      message = 'La contraseña debe contener al menos una mayúscula';
+      message = "La contraseña debe contener al menos una mayúscula";
     } else if (!LOWERCASE_PATTERN.test(value)) {
-      message = 'La contraseña debe contener al menos una minúscula';
-    } else if(!NONALPHANUMERIC_PATTERN.test(value)) {
-      message = 'La contraseña debe contener un carácter especial';
+      message = "La contraseña debe contener al menos una minúscula";
+    } else if (!NONALPHANUMERIC_PATTERN.test(value)) {
+      message = "La contraseña debe contener un carácter especial";
     } else if (value && value.length < 8) {
-      message = 'La contraseña debe contener un mínimo de 8 caracteres';
+      message = "La contraseña debe contener un mínimo de 8 caracteres";
     }
     return message;
   },
   confirmPassword: (value, password) => {
     let message;
     if (!value) {
-      message = 'Confirma tu contraseña';
+      message = "Confirma tu contraseña";
     } else if (value !== password) {
-      message = 'La contraseña no coincide';
+      message = "La contraseña no coincide";
     }
     return message;
   }
@@ -83,11 +82,11 @@ const SignUpForm = () => {
 
   const [state, setstate] = useState({
     fields: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      confirmPassword: ''
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: ""
     },
     errors: {
       firstName: validators.firstName(),
@@ -98,15 +97,16 @@ const SignUpForm = () => {
     }
   });
 
-  const { firstName, lastName, email, password, confirmPassword } = state.fields;
+  const { firstName, lastName, email, password, confirmPassword } =
+    state.fields;
 
   const [touched, setTouched] = useState({});
 
   const [showing, setShowing] = useState({
     activepassword: false,
-    password: '',
+    password: "",
     activeconfirmPassword: false,
-    confirmPassword: ''
+    confirmPassword: ""
   });
 
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -124,10 +124,14 @@ const SignUpForm = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-
+    setShowing({
+      ...showing,
+      activepassword: false,
+      activeconfirmPassword: false
+    });
     if (isValid) {
       register(state.fields)
-        .then((response) => {
+        .then((r) => {
           const fields = {
             email: state.fields.email,
             password: state.fields.password
@@ -141,31 +145,29 @@ const SignUpForm = () => {
             });
 
             setIsOpenModal(true);
-            console.log(response)
-            
+
             setAccessToken(response.token);
-            doLogin().then(() => {
-              history('/');
-            });
+            doLogin({ user: response.name, email: response.email });
+            history("/");
           });
         })
 
-      .catch((e) => {
-        setInfoModal({
-          type: 'error',
-          title: '¡Ooooops!',
-          message: e.message
+        .catch((e) => {
+          setInfoModal({
+            type: "error",
+            title: "¡Ooooops!",
+            message: e.message
+          });
+          setIsOpenModal(true);
         });
-        setIsOpenModal(true);
-      });
-    };
+    }
   };
 
   const showLastCharacter = (characters) => {
-    let result = '';
+    let result = "";
     const num = characters.length - 1;
     for (let i = 0; i < num; i++) {
-      result += '•';
+      result += "•";
     }
     return result + characters.slice(num);
   };
@@ -181,13 +183,13 @@ const SignUpForm = () => {
         errors: {
           ...prevState.errors,
           [name]:
-            validators[name] && name === 'confirmPassword'
+            validators[name] && name === "confirmPassword"
               ? validators[name](value, password)
               : validators[name](value)
         }
       }));
     }
-    if (name === 'password' || name === 'confirmPassword') {
+    if (name === "password" || name === "confirmPassword") {
       const time =
         value === state.fields[name].slice(0, value.length)
           ? displayLastCharDeleting
@@ -223,9 +225,9 @@ const SignUpForm = () => {
         <BaseLogo />
         <h1
           style={{
-            fontWeight: '800',
-            textAlign: 'center',
-            marginBottom: '1rem'
+            fontWeight: "800",
+            textAlign: "center",
+            marginBottom: "1rem"
           }}
         >
           ¡Regístrate!
@@ -265,11 +267,11 @@ const SignUpForm = () => {
             isvalid={errors.email}
           />
           <Input
-            id={'password'}
+            id={"password"}
             label="Contraseña"
-            type={showing.activepassword ? 'text' : 'password'}
+            type={showing.activepassword ? "text" : "password"}
             name="password"
-            value={showing.activepassword ? showing.password : password}
+            value={password}
             disabled={showing.activepassword}
             onChange={onChange}
             onBlur={onBlur}
@@ -278,9 +280,9 @@ const SignUpForm = () => {
             isvalid={errors.password}
           />
           <Input
-            id={'confirmPassword'}
+            id={"confirmPassword"}
             label="Confirmar contraseña"
-            type={showing.activeconfirmPassword ? 'text' : 'password'}
+            type={showing.activeconfirmPassword ? "text" : "password"}
             name="confirmPassword"
             value={
               showing.activeconfirmPassword

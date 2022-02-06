@@ -7,19 +7,20 @@ export const UserContext = createContext();
 export function UserContextProvider({ children }) {
   const [user, setUser] = useState(null);
 
-  const doLogin = () => {
-    return getUserInfo().then((response) => {setUser(response); return response});
+  const doLogin = (u) => {
+    // return getUserInfo().then((response) => {setUser(response); return response});
+    setUser({ u });
   };
 
-  useEffect(() => {
-    if (getAccessToken()) {
-      doLogin();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (getAccessToken()) {
+  //     doLogin();
+  //   }
+  // }, []);
 
   const value = {
     doLogin,
-    user, 
+    user
   };
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }
