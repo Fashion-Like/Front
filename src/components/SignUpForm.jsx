@@ -124,11 +124,6 @@ const SignUpForm = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    setShowing({
-      ...showing,
-      activepassword: false,
-      activeconfirmPassword: false
-    });
     if (isValid) {
       register(state.fields)
         .then((r) => {
@@ -284,11 +279,7 @@ const SignUpForm = () => {
             label="Confirmar contraseña"
             type={showing.activeconfirmPassword ? "text" : "password"}
             name="confirmPassword"
-            value={
-              showing.activeconfirmPassword
-                ? showing.confirmPassword
-                : confirmPassword
-            }
+            value={confirmPassword}
             disabled={showing.activeconfirmPassword}
             onChange={onChange}
             onBlur={onBlur}
