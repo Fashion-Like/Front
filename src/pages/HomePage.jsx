@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import Categories from '../components/Categories';
@@ -7,6 +8,7 @@ import BannerMujer from '../assets/images/banners_mujer.svg';
 import BannerHombre from '../assets/images/banners_hombres.svg';
 import BannerNiños from '../assets/images/banner_niños.svg';
 import Post from '../components/Post';
+import NewPostModal from '../components/NewPostModal';
 
 const GridLayout = styled.div`
 
@@ -33,14 +35,19 @@ const Banners = styled.div`
 `;
 
 const HomePage = () => {
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
   return (
+    <>
     <GridLayout>
       <GlobalStyle />
       <Header />
       <Categories />
       <Posts>
         <Featured />
-        <Post />
+        <Post 
+          setIsOpenModal={setIsOpenModal}
+        />
       </Posts>
       <Banners>
         <img src={BannerMujer} alt="banner_mujer" />
@@ -48,6 +55,15 @@ const HomePage = () => {
         <img src={BannerNiños} alt="banner_niños" />
       </Banners>
     </GridLayout>
+    {isOpenModal &&
+    <NewPostModal 
+            title="Crear publicación"
+            setIsOpenModal={setIsOpenModal}
+            isOpenModal={isOpenModal}
+        />
+    }
+    </>
+
   );
 };
 
