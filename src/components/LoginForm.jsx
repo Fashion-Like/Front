@@ -26,7 +26,7 @@ const LoginForm = () => {
     const { fields } = state;
     e.preventDefault();
     login(fields).then((response) => {
-      setAccessToken(response.access_token);
+      setAccessToken(response.token);
       doLogin().then(() => {
         history("/");
       });

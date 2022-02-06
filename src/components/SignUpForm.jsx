@@ -18,9 +18,11 @@ const EMAIL_PATTERN =
   /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 const NUM_PATTERN = /[0-9]/;
 const CAPITAL_PATTERN = /[A-Z]/;
+const LOWERCASE_PATTERN = /[a-z]/;
+const NONALPHANUMERIC_PATTERN = /[@$!%*#?&]/;
 
 const validators = {
-  name: (value) => {
+  firstName: (value) => {
     let message;
     if (!value) {
       message = 'Introduce tu nombre';
@@ -29,7 +31,7 @@ const validators = {
     }
     return message;
   },
-  lastname: (value) => {
+  lastName: (value) => {
     let message;
     if (!value) {
       message = 'Introduce tus apellidos';
@@ -55,6 +57,10 @@ const validators = {
       message = 'La contraseña debe contener al menos un número';
     } else if (!CAPITAL_PATTERN.test(value)) {
       message = 'La contraseña debe contener al menos una mayúscula';
+    } else if (!LOWERCASE_PATTERN.test(value)) {
+      message = 'La contraseña debe contener al menos una minúscula';
+    } else if(!NONALPHANUMERIC_PATTERN.test(value)) {
+      message = 'La contraseña debe contener un carácter especial';
     } else if (value && value.length < 8) {
       message = 'La contraseña debe contener un mínimo de 8 caracteres';
     }
@@ -77,22 +83,22 @@ const SignUpForm = () => {
 
   const [state, setstate] = useState({
     fields: {
-      name: '',
-      lastname: '',
+      firstName: '',
+      lastName: '',
       email: '',
       password: '',
       confirmPassword: ''
     },
     errors: {
-      name: validators.name(),
-      lastname: validators.lastname(),
+      firstName: validators.firstName(),
+      lastName: validators.lastName(),
       email: validators.email(),
       password: validators.password(),
       confirmPassword: validators.confirmPassword()
     }
   });
 
-  const { name, lastname, email, password, confirmPassword } = state.fields;
+  const { firstName, lastName, email, password, confirmPassword } = state.fields;
 
   const [touched, setTouched] = useState({});
 
@@ -130,27 +136,28 @@ const SignUpForm = () => {
           login(fields).then((response) => {
             setInfoModal({
               type: "success",
-              title: "¡Felicidades!",
+              title: `¡Felicidades! ${response.name}`,
               message: "Tu cuenta se ha creado de manera exitosa"
             });
 
             setIsOpenModal(true);
-
-            setAccessToken(response.access_token);
+            console.log(response)
+            
+            setAccessToken(response.token);
             doLogin().then(() => {
               history('/');
             });
           });
         })
 
-        .catch((e) => {
-          setInfoModal({
-            type: 'error',
-            title: '¡Ooooops!',
-            message: e.message
-          });
-          setIsOpenModal(true);
+      .catch((e) => {
+        setInfoModal({
+          type: 'error',
+          title: '¡Ooooops!',
+          message: e.message
         });
+        setIsOpenModal(true);
+      });
     };
   };
 
@@ -227,24 +234,24 @@ const SignUpForm = () => {
           <Input
             label="Nombres"
             type="text"
-            name="name"
-            value={name}
+            name="firstName"
+            value={firstName}
             onChange={onChange}
             onBlur={onBlur}
             onFocus={onFocus}
-            message={touched.name && errors.name}
-            isvalid={errors.name}
+            message={touched.firstName && errors.firstName}
+            isvalid={errors.firstName}
           />
           <Input
             label="Apellidos"
             type="text"
-            name="lastname"
-            value={lastname}
+            name="lastName"
+            value={lastName}
             onChange={onChange}
             onBlur={onBlur}
             onFocus={onFocus}
-            message={touched.lastname && errors.lastname}
-            isvalid={errors.lastname}
+            message={touched.lastName && errors.lastName}
+            isvalid={errors.lastName}
           />
           <Input
             label="Correo electrónico"
