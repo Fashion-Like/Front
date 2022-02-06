@@ -7,8 +7,9 @@ export const UserContext = createContext();
 export function UserContextProvider({ children }) {
   const [user, setUser] = useState(null);
 
-  const doLogin = () => {
-    return getUserInfo().then((response) => {setUser(response); return response});
+  const doLogin = (u) => {
+    // return getUserInfo().then((response) => {setUser(response); return response});
+    setUser({ u });
   };
 
   useEffect(() => {
@@ -19,7 +20,7 @@ export function UserContextProvider({ children }) {
 
   const value = {
     doLogin,
-    user, 
+    user
   };
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }

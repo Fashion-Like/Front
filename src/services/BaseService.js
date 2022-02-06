@@ -1,11 +1,11 @@
 import axios from "axios";
 import { getAccessToken, logout } from "../stores/AccessTokenStore";
 
+const URL = process.env.REACT_APP_API_HOST || "http://localhost:44360";
+
 export const create = (opts = {}) => {
   const http = axios.create({
-    baseURL:
-    //   `${process.env.REACT_APP_API_HOST}/api` || 
-      `http://localhost:44360/api`,
+    baseURL: URL + "/api",
     ...opts
   });
 
@@ -22,6 +22,8 @@ export const create = (opts = {}) => {
     (response) => response.data,
     (error) => {
       if (error.response && [401, 403].includes(error.response.status)) {
+        console.log(response.data)
+        console.log(error.response)
         logout();
       }
 

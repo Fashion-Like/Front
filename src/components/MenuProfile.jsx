@@ -1,6 +1,7 @@
-import { faCaretDown, faUser } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styled from 'styled-components';
+import { faCaretDown, faUser } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import styled from "styled-components";
+import { logout } from "../stores/AccessTokenStore";
 
 const Container = styled.div`
   display: flex;
@@ -19,17 +20,10 @@ const NameUser = styled.span`
 const MenuProfile = () => {
   return (
     <Container>
-      <FontAwesomeIcon
-        icon={ faUser }
-        size="lg"
-        color={ 'gray'}
-      />
+      <FontAwesomeIcon icon={faUser} size="lg" color={"gray"} />
+      <a onClick={logout}>Logout</a>
       <NameUser>Nombre Apellido</NameUser>
-      <FontAwesomeIcon
-        icon={ faCaretDown }
-        size="lg"
-        color={ 'gray'}
-      />
+      <FontAwesomeIcon icon={faCaretDown} size="lg" color={"gray"} />
     </Container>
   );
 };

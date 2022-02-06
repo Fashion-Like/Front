@@ -19,7 +19,7 @@ const LoginForm = () => {
     fields: {
       email: "",
       password: ""
-    },
+    }
   });
 
   const onSubmit = (e) => {
@@ -27,9 +27,10 @@ const LoginForm = () => {
     e.preventDefault();
     login(fields).then((response) => {
       setAccessToken(response.token);
-      doLogin().then(() => {
-        history("/");
-      });
+      // doLogin().then(() => {
+      doLogin({ user: response.name, email: response.email });
+      history("/");
+      // });
     });
   };
 
@@ -44,6 +45,7 @@ const LoginForm = () => {
   };
 
   const { email, password } = state.fields;
+  console.log(password);
   return (
     <>
       <FormBox>
