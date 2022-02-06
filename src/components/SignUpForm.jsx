@@ -124,7 +124,11 @@ const SignUpForm = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-
+    setShowing({
+      ...showing,
+      activepassword: false,
+      activeconfirmPassword: false
+    });
     if (isValid) {
       register(state.fields)
         .then((r) => {
@@ -267,7 +271,7 @@ const SignUpForm = () => {
             label="Contraseña"
             type={showing.activepassword ? "text" : "password"}
             name="password"
-            value={showing.activepassword ? showing.password : password}
+            value={password}
             disabled={showing.activepassword}
             onChange={onChange}
             onBlur={onBlur}

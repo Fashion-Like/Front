@@ -12,11 +12,11 @@ export function UserContextProvider({ children }) {
     setUser({ u });
   };
 
-  useEffect(() => {
-    if (getAccessToken()) {
-      doLogin();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (getAccessToken()) {
+  //     doLogin();
+  //   }
+  // }, []);
 
   const value = {
     doLogin,

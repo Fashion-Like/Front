@@ -22,8 +22,6 @@ export const create = (opts = {}) => {
     (response) => response.data,
     (error) => {
       if (error.response && [401, 403].includes(error.response.status)) {
-        console.log(response.data)
-        console.log(error.response)
         logout();
       }
 
