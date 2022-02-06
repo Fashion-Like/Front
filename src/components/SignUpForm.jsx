@@ -126,25 +126,29 @@ const SignUpForm = () => {
     e.preventDefault();
     if (isValid) {
       register(state.fields)
-        .then((r) => {
+        .then((response) => {
           const fields = {
             email: state.fields.email,
             password: state.fields.password
           };
-
-          login(fields).then((response) => {
+          
             setInfoModal({
               type: "success",
               title: `¡Felicidades! ${response.name}`,
               message: "Tu cuenta se ha creado de manera exitosa"
             });
-
+  
             setIsOpenModal(true);
 
-            setAccessToken(response.token);
-            doLogin({ user: response.name, email: response.email });
-            history("/");
-          });
+            setTimeout(() => {
+
+              login(fields).then((response) => {
+                setAccessToken(response.token);
+                doLogin({ user: response.name, email: response.email });
+                history("/");
+              });
+              
+            }, 3000);
         })
 
         .catch((e) => {
