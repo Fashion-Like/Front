@@ -27,7 +27,12 @@ const LoginForm = () => {
     e.preventDefault();
     login(fields).then((response) => {
       setAccessToken(response.token);
-      doLogin({ user: response.name, email: response.email });
+      const user = {
+        name: response.name,
+        email: response.email
+      }
+      localStorage.setItem('user', JSON.stringify(user))
+      doLogin(user);
       history("/");
     });
   };
