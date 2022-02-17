@@ -2,17 +2,28 @@ import { ContainerModal, HeadModal, Backdrop } from '../assets/css/styledModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import PostForm from './PostForm';
-import styled from 'styled-components';
+import styled from 'styled-components'; 
 
 const BodyModal = styled.div`
   margin-top: 1rem;
   height: auto;
 `
 
-const NewPostModal = ({ title, isOpenModal, setIsOpenModal }) => {
+const NewPostModal = ({
+  title,
+  isOpenModal,
+  setIsOpenModal,
+  setIsEdit,
+  isEdit,
+  prevPost,
+}) => {
+
   const closeModal = () => {
     setIsOpenModal(false);
   };
+
+  console.log(isEdit)
+
 
   return (
     <>
@@ -32,7 +43,7 @@ const NewPostModal = ({ title, isOpenModal, setIsOpenModal }) => {
           </HeadModal>
 
           <BodyModal>
-            <PostForm />
+            <PostForm setIsOpenModal={setIsOpenModal} prevPost={prevPost} isEdit={isEdit} setIsEdit={setIsEdit}/>
           </BodyModal>
         </ContainerModal>
       </Backdrop >

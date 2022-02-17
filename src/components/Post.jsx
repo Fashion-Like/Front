@@ -1,10 +1,14 @@
 import styled from 'styled-components';
 import LogoPost from '../assets/images/logomobile.svg';
-import ImgFalda from '../assets/images/img-falda.png';
 import { faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faThumbsUp, faCommentAlt, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import IconComments from '../assets/images/icon-comments.png';
+import { getPosts, deletePost, getTags } from '../services/PostService';
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllPosts, setDeletePost, setPostById} from '../stores/slices/posts';
+import NewPostModal from '../components/NewPostModal';
 
 
 const Container = styled.div`
@@ -15,6 +19,7 @@ const ContainerPost = styled.div`
   padding: 1rem 1.5rem;
   background: #ffffff;
   border-radius: 10px;
+  margin: 1.5rem;
 `;
 
 const Title = styled.h2`
@@ -36,7 +41,7 @@ const DatePost = styled.div`
 `;
 
 const TagCategory = styled.span`
-  border: solid 1px blue;
+  border: solid 1px #00628F;
   padding: .2rem;
   border-radius: 5px;
 `;
@@ -72,6 +77,11 @@ const FooterPost = styled.div`
   align-items: center;
 `;
 
+const DescriptionPost = styled.p`
+  margin: .5rem 0;
+  line-height: 1.5;
+`;
+
 const Button = styled.button`
   height: 2.5rem;
   width: 30%;
@@ -91,13 +101,54 @@ const Button = styled.button`
     background: linear-gradient(90deg, #003185 1.89%, #01567e 98.36%);
   }
 `
+const Post = ({}) => {
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [prevPost, setPrevPost] = useState({});
 
-const Post = ({setIsOpenModal}) => {
+  const title = isEdit ? "Editar publicación" : "Crear publicación";
+
+  const dispatch = useDispatch();
+
+  const { posts } = useSelector(state => state.posts);
+
   const openModal = () => {
     setIsOpenModal(true);
+    getAllTags();
   };
+  
+  useEffect(() => {
+    dispatch( getAllPosts() );
+  }, [dispatch]);
+
+  const handleDeletePost = async (post) => {
+    const response = await deletePost(post.id);
+    response ? dispatch(setDeletePost(post)) : console.log("error")
+  }
+
+  const handleEditPost = (post) => {
+    setIsEdit(true)
+    setPrevPost(dispatch(setPostById(post)));
+    setIsOpenModal(true)
+  }
+
+  const formatDate = (date) => {
+    const newDate = new Date(date);
+    const options = {
+      month: "long",
+      day: "2-digit"
+    }
+    return new Intl.DateTimeFormat("es", options).format(newDate);
+  }
+
+  const getAllTags = async () => {
+    const allTags = await getTags();
+    console.log(allTags)
+  }
 
   return (
+
+    posts && 
     <Container>
       <div
         style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem'}}
@@ -116,69 +167,92 @@ const Post = ({setIsOpenModal}) => {
         onClick={openModal}
         >
           <FontAwesomeIcon
-              icon={ faPlus }
-              size="sm"
-              color={ 'white'}
+            icon={ faPlus }
+            size="sm"
+            color={ 'white'}
           />
           {' '}
           Agregar
         </Button>
       </div>
-      <ContainerPost>
-        <HeaderPost>
-          <DatePost>
-            <img src={LogoPost} alt="logo_fashion_like" />
-            <div>
-              <h3>Fashion Like</h3>
-              <span>30julio</span>
-            </div>
-          </DatePost>
-          <TagCategory>Faldas</TagCategory>
-        </HeaderPost>
-        <ImgPost src={ImgFalda} alt="imagen-producto" />
-        <Flex>
+      {
+        posts ? posts.map( (post) => (
+        <ContainerPost
+          key={post.id}
+        >
+          <HeaderPost>
+            <DatePost>
+              <img src={LogoPost} alt="logo_fashion_like" />
+              <div>
+                <h3>Fashion Like</h3>
+                <span>{formatDate(post.creationDate)}</span>
+              </div>
+            </DatePost>
+            <TagCategory>{post.tags[0]}</TagCategory>
+          </HeaderPost>
+          <DescriptionPost>{post.description}</DescriptionPost>
+          <ImgPost src={post.pictureUrl} alt="imagen-producto" />
           <Flex>
-            <FontAwesomeIcon
-              icon={ faThumbsUp }
-              size="lg"
-              color={ 'gray'}
-            />
-            <span>5</span>
+            <Flex>
+              <FontAwesomeIcon
+                icon={ faThumbsUp }
+                size="lg"
+                color={ 'gray'}
+              />
+              <span> {post.userReaction} </span>
+            </Flex>
+            <Flex>
+              <FontAwesomeIcon
+                icon={ faEdit }
+                size="lg"
+                color={ 'gray'}
+                style={{cursor: "pointer"}}
+                onClick={() => handleEditPost(post)}
+              />
+              <FontAwesomeIcon
+                icon={ faTrashAlt }
+                size="lg"
+                color={ 'gray'}
+                style={{cursor: "pointer"}}
+                id={post.id}
+                values={post.id}
+                onClick={() => handleDeletePost(post)}
+              />
+            </Flex>
           </Flex>
-          <Flex>
-            <FontAwesomeIcon
-              icon={ faEdit }
-              size="lg"
-              color={ 'gray'}
-            />
-            <FontAwesomeIcon
-              icon={ faTrashAlt }
-              size="lg"
-              color={ 'gray'}
-            />
-          </Flex>
-        </Flex>
-        <Divider style={{ background: '#cecece' }}/>
-        <FooterPost>
-          <Flex>
-            <FontAwesomeIcon
-              icon={ faThumbsUp }
-              size="lg"
-              color={ 'gray'}
-            />
-            <span>Me gusta</span>
-          </Flex>
-          <Flex>
-            <FontAwesomeIcon
-              icon={ faCommentAlt }
-              size="lg"
-              color={ 'gray'}
-            />
-            <span>Comentar</span>
-          </Flex>
-        </FooterPost>
-        <Divider style={{ background: '#cecece' }}/>
-      </ContainerPost>
+          <Divider style={{ background: '#cecece' }}/>
+          <FooterPost>
+            <Flex>
+              <FontAwesomeIcon
+                icon={ faThumbsUp }
+                size="lg"
+                color={ 'gray'}
+              />
+              <span>Me gusta</span>
+            </Flex>
+            <Flex>
+              <FontAwesomeIcon
+                icon={ faCommentAlt }
+                size="lg"
+                color={ 'gray'}
+              />
+              <span>Comentar</span>
+            </Flex>
+          </FooterPost>
+          <Divider style={{ background: '#cecece' }}/>
+        </ContainerPost>
+        )) : ""
+      }
+      {isOpenModal &&
+        <NewPostModal 
+          title={title}
+          setIsOpenModal={setIsOpenModal}
+          isOpenModal={isOpenModal}
+          setIsEdit={setIsEdit}
+          isEdit={isEdit}
+          prevPost={prevPost}
+          />
+      }
     </Container>
   );
 };

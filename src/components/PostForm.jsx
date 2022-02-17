@@ -1,9 +1,14 @@
+import { useState, useRef } from 'react';
 import styled from 'styled-components';
 import BaseButton from "../ui/BaseButton";
 import LogoPost from '../assets/images/logomobile.svg';
 import { faImage, faLaugh } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import { createPost, updatePost } from "../services/PostService"
+import {TAGS}  from "../constants.js/tags";
+import Picker from 'emoji-picker-react';
+import { setNewPost, setUpdatePost } from '../stores/slices/posts';
+import { useDispatch } from "react-redux";
 
 const HeaderPost = styled.div`
   display: flex;
@@ -54,6 +59,7 @@ const DatePost = styled.div`
   display: flex;
   gap: .5rem;
   align-items: center;
+  font-size: 14px;
 `;
 
 const Form = styled.form`
@@ -66,50 +72,150 @@ const Icons = styled.div`
   align-self: end;
   display: flex;
   gap: 1rem;
-  margin-bottom: .5rem;
+  margin-bottom: 1rem;
   cursor: pointer;
+  z-index: 1;
 `
 
-const PostForm = () => {
+const PostForm = ({setIsOpenModal, prevPost, isEdit, setIsEdit}) => {
+
+  const postToUpdate = prevPost.payload;
+
+  const dispatch = useDispatch();
+
+  const [tag, setTag] = useState(!isEdit? "Selecciona"  :  postToUpdate.tags[0]);
+  const [description, setDescription] = useState(!isEdit ? "" : postToUpdate.description);
+  const [fileName, setFileName] = useState("");
+  const [imageBase64, setImageBase64] = useState("");
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(e)
+    const post = {
+      fileName,
+      description,
+      imageBase64,
+      tags: [tag],
+    }
+
+    if (!isEdit) {
+      createPost(post)
+      .then((response) => {
+        dispatch(setNewPost(response))
+      })
+    }
+    updatePost(postToUpdate.id, post)
+    .then((response) => {
+      dispatch(setUpdatePost(response))
+    })
+
+    e.target.reset();
+    setDescription("");
+    setTag("");
+    setFileName("");
+    setIsOpenModal(false);
   }
 
+  const handleTag = (e) => {
+    setTag(e.target.value)
+  }
+
+  const handleDescription = (e) => {
+    setDescription(e.target.value)
+  }
+
+  const handleImage = (e) => {
+    const file = e.target.files[0];
+    setFileName(file.name)
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (e) => {
+      const result = e.target.result;
+      const index = result.indexOf(",")
+      setImageBase64(result.substring((index + 1), result.length))
+    }
+  }
+
+  const cutFileName = (fileName) => {
+    return `${fileName.substring(0, 15)}...`;
+  }
+
+  const [showPicker, setShowPicker] = useState(false);
+  const onEmojiClick = (event, emojiObject) => {
+    setDescription(prevInput => prevInput + emojiObject.emoji);
+    setShowPicker(false);
+  };
+
   return (
+     
     <div>
         <HeaderPost>
           <DatePost>
-            <img src={LogoPost} alt="logo_fashion_like" />
+            <img src={LogoPost} alt="logo_fashion_like" style={{ width: '30px' }} />
             <div>
               <h4>Fashion Like</h4>
-              <span>30julio</span>
             </div>
           </DatePost>
-          <Select>
-            <option value="1">Faldas</option>
-            <option value="2">Camisas</option>
-            <option value="3">Shorts</option>
-            <option value="4">Pantalones</option>
+          <Select
+            name="tag"
+            value={tag}
+            onChange={handleTag}
+            options={TAGS}
+          >
+            {
+            TAGS.map((option) => (
+              <option
+              key={option.value}
+              value={option.value}
+              >
+              {option.value}
+              </option>
+            ))
+            }   
           </Select>
         </HeaderPost>
       <Form onSubmit={onSubmit}>
         <Textarea
+          value={description}
+          name="description"
+          onChange={handleDescription}
           placeholder="¿Qué estás pensando?"
         />
         <Icons>
-          <FontAwesomeIcon
-                icon={ faImage }
-                size="lg"
-                color={ 'gray'}
+          <span>{fileName && cutFileName(fileName)}</span>
+          <label
+            htmlFor="selectFile"
+            style={{
+              background: "transparent", 
+              border: "none", 
+              cursor: "pointer", 
+            }}
+          >
+            <FontAwesomeIcon
+              icon={ faImage }
+              size="lg"
+              color={ 'gray'}
+            />
+
+            <input
+            id='selectFile'
+            type="file"
+            name="file"
+            onChange={handleImage}
+            accept='image/*'
+            style={{display : "none"}}
           />
+          </label>
+
           <FontAwesomeIcon
             icon={ faLaugh }
             size="lg"
             color={ 'gray'}
-          />
+            onClick={() => setShowPicker(val => !val)} />
         </Icons>
+        {showPicker && <Picker
+          pickerStyle={{ width: '100%' }}
+          onEmojiClick={onEmojiClick} />
+        }
         <BaseButton type="submit" text="ENVIAR" />
       </Form>
     </div>
