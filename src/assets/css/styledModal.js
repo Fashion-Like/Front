@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Backdrop = styled.div`
   width: 100vw;
@@ -7,7 +7,7 @@ const Backdrop = styled.div`
   top: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.7);
-  padding:40px;
+  padding: 40px;
   z-index: 1;
   display: grid;
   align-items: center;
@@ -43,8 +43,9 @@ const HeadModal = styled.div`
 `;
 
 const BodyModal = styled.div`
-  padding-top: 2rem; 
+  padding-top: 2rem;
   min-height: 60%;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -66,9 +67,4 @@ const BodyModal = styled.div`
   }
 `;
 
-export {
-  Backdrop,
-  ContainerModal,
-  HeadModal,
-  BodyModal
-};
+export { Backdrop, ContainerModal, HeadModal, BodyModal };
