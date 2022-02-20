@@ -43,10 +43,15 @@ const MenuProfile = () => {
   return (
     <Container>
       {/* <a onClick={logout}>Logout</a> */}
-      <FontAwesomeIcon icon={faUser} size="lg" color={"gray"} />
+      {/* <FontAwesomeIcon icon={faUser} size="lg" color={"gray"} /> */}
       <NameUser> {userLogged.name} </NameUser>
       <FontAwesomeIcon icon={faCaretDown} size="lg" color={"gray"} onClick={() => setNavBar(true)}/>
-      {navBar && <NavBar />}
+      {navBar &&
+       <NavBar 
+       setNavBar={setNavBar} 
+       navBar={navBar} 
+       />
+      }
     </Container>
   );
 };
