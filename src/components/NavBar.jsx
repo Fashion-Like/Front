@@ -14,6 +14,7 @@ const Nav = styled.div`
 
   & span{
     padding: .7rem;
+    display: block;
   }
   & a{
     display: block;
@@ -26,14 +27,19 @@ const Nav = styled.div`
   }
 `
 
-const NavBar = () => {
+const NavBar = ({setNavBar}) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const closeNavBar = () => {
+    setNavBar(false)
+  }
+
   return (
     <nav>
-      <Nav>
+      <Nav onClick={closeNavBar}>
         <span>¡Bienvenido!</span>
-        <a>Mi nombre</a>
+        <span>{user.name}</span>
         <a>Estadísticas</a>
-        <a onClick={logout}>LogOut</a>
+        <a onClick={logout}>Salir</a>
       </Nav>
     </nav>
   )

@@ -1,5 +1,8 @@
-import Camisas from '../assets/images/Camisas.png';
 import styled from 'styled-components';
+import {TAGS}  from "../constants.js/tags";
+import { getAllPosts } from '../stores/slices/posts';
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from 'react';
 
 const Container = styled.div`
   background: #FFF;
@@ -10,7 +13,7 @@ const Container = styled.div`
   margin-bottom: 1rem;
 
   /* @media (min-width: 1120px) {
-    max-width: 300px;
+    height: 80vh;
   } */
 }
 `;
@@ -44,6 +47,10 @@ const Category = styled.div`
     align-items: center;
     margin-bottom: 1rem;
   }
+  &:hover {
+    background: #f9f9f9;
+    cursor: pointer;
+  }
 `;
 
 const Scroll = styled.div`
@@ -56,7 +63,7 @@ const Scroll = styled.div`
   }
   &::-webkit-scrollbar:horizontal {
     height: 5px;
-    background: #354a62;
+    background: #ececec;
     border-radius: 30px;
   }
   &::-webkit-scrollbar-thumb {
@@ -66,28 +73,52 @@ const Scroll = styled.div`
 
   @media (min-width: 1120px) {
     display: block;
-    max-height: 60vh;
+    max-height: 70vh; */
     &::-webkit-scrollbar-track {
-      background: #354a62;
+      background: #ececec;
       border-radius: 30px;
     }
     &::-webkit-scrollbar-thumb {
-      background: #073992;
+      background: #CCD7E0;
       border-radius: 30px;
     }
   }
 `;
 
 const Categories = () => {
+  const [category, setCategory] = useState("");
+  const dispatch = useDispatch();
+
+  const handleCategory = (category) => {
+    setCategory(category)
+    dispatch( getAllPosts(category) )
+  }
+
+  // const { posts } = useSelector(state => state.posts);
+  // console.log(posts)
+  // console.log(category)
+
+
+
   return (
-    <Container>
+    <Container
+    >
       <Title>Categorías</Title>
       <Divider/>
-      <Scroll>
-        <Category>
-          <img src={Camisas} alt="camisas" />
-          <p> Camisas </p>
-        </Category>
+      <Scroll
+      >
+      {
+        TAGS.map((item) => (
+          item.img !== "" &&
+          <Category
+          key={item.value}
+          onClick={()=> handleCategory (item.value)}
+          >
+            <img src={item.img} alt={item.value} />
+            <p> {item.value} </p>
+          </Category>
+        ))
+      }
       </Scroll>
     </Container>
   );

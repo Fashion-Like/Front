@@ -19,7 +19,8 @@ const ContainerModal = styled.div`
   z-index: 2;
   background: white;
   width: 380px;
-  height: 350px;
+  min-height: 350px;
+  height: auto;
   border-radius: 5px;
   padding: 20px;
 `;

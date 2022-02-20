@@ -7,8 +7,25 @@ export const createPost = async (data) => {
   return res;
 };
 
-export const getPosts = async () => {
-  const res = await http.get("/Posts");
+export const getPosts = async (search) => {
+  const config = {
+    params: {
+      sort: "DateDesc",
+      search: search,
+    },
+  };
+  const res = await http.get("/Posts", config);
+  return res.data;
+};
+
+export const getPostsFeatured = async () => {
+  const config = {
+    params: {
+      sort: "userReaction",
+      pageSize: 9,
+    },
+  };
+  const res = await http.get("/Posts", config);
   return res.data;
 };
 

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getPosts } from "../../../services/PostService";
+import { getPosts, getPostsFeatured } from "../../../services/PostService";
 
 export const postsSlice = createSlice({
   name: "posts",
@@ -19,6 +19,9 @@ export const postsSlice = createSlice({
         }
       });
     },
+    setPostsFeatured: (state, action) => {
+      state.postsFeatured = action.payload;
+    },
     setDeletePost: (state, action) => {
       state.posts = state.posts.filter((item) => item.id !== action.payload.id);
     },
@@ -36,13 +39,22 @@ export const postsSlice = createSlice({
   },
 });
 
-export const getAllPosts = () => (dispatch) => {
-  getPosts()
+export const getAllPosts = (search) => (dispatch) => {
+  getPosts(search)
     .then((response) => {
       dispatch(setPosts(response));
     })
     .catch((error) => console.log(error));
 };
+
+// export const getAllPostsFeatured = () => (dispatch) => {
+//   getPostsFeatured()
+//     .then((response) => {
+//       console.log(response);
+//       dispatch(setPostsFeatured(response));
+//     })
+//     .catch((error) => console.log(error));
+// };
 
 export const {
   setPosts,
@@ -50,6 +62,7 @@ export const {
   setNewPost,
   setUpdatePost,
   setPostById,
+  setPostsFeatured,
 } = postsSlice.actions;
 
 export default postsSlice.reducer;

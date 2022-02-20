@@ -7,8 +7,8 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const HeaderElement = styled.div`
-  min-width: 100vw;
-  max-width: 100vw;
+  min-width: 98vw;
+  max-width: 98vw;
   display: grid;
   grid-template-columns: 1fr 40px 75px;
   align-items: center;
@@ -44,11 +44,15 @@ const IconMobile = styled.div`
 `;
 
 const Header = () => {
+  const redirectTo = () => {
+    window.location.assign("/");
+  }
+
   return (
     <HeaderElement>
 
-        <Logo src={LogoImg} alt="logo" />
-        <LogoMobile src={LogoMobileImg} alt="logo" />
+        <Logo src={LogoImg} alt="logo" onClick={redirectTo} style={{cursor: "pointer"}}/>
+        <LogoMobile src={LogoMobileImg} onClick={redirectTo} alt="logo" style={{cursor: "pointer"}} />
 
       <InputSearch />
       <IconMobile>

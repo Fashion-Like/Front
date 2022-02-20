@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPosts, setDeletePost, setPostById} from '../stores/slices/posts';
 import NewPostModal from '../components/NewPostModal';
+import { TAGS } from '../constants.js/tags';
 
 
 const Container = styled.div`
@@ -41,15 +42,17 @@ const DatePost = styled.div`
 `;
 
 const TagCategory = styled.span`
-  border: solid 1px #00628F;
+  border: solid 2px ${(props) => props.color};
   padding: .2rem;
   border-radius: 5px;
 `;
 
+
 const ImgPost = styled.img`
-  object-fit: cover;
+  /* object-fit: cover; */
   width: 100%;
-  max-height: 60vh;
+  height: auto;
+  max-height: 80vh;
   margin-bottom: 1.25rem;
 
   @media (min-width: 1024px) {
@@ -105,6 +108,8 @@ const Post = ({}) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [prevPost, setPrevPost] = useState({});
+  const user = JSON.parse(localStorage.getItem("user"));
+
 
   const title = isEdit ? "Editar publicación" : "Crear publicación";
 
@@ -116,6 +121,7 @@ const Post = ({}) => {
     setIsOpenModal(true);
     getAllTags();
   };
+  
   
   useEffect(() => {
     dispatch( getAllPosts() );
@@ -188,7 +194,13 @@ const Post = ({}) => {
                 <span>{formatDate(post.creationDate)}</span>
               </div>
             </DatePost>
-            <TagCategory>{post.tags[0]}</TagCategory>
+            <TagCategory
+              color={
+                TAGS.map(tag => (tag.value === post.tags[post.tags.length -1] && tag.color))
+              }
+            >
+              {post.tags[post.tags.length -1]}
+            </TagCategory>
           </HeaderPost>
           <DescriptionPost>{post.description}</DescriptionPost>
           <ImgPost src={post.pictureUrl} alt="imagen-producto" />
@@ -202,14 +214,20 @@ const Post = ({}) => {
               <span> {post.userReaction} </span>
             </Flex>
             <Flex>
-              <FontAwesomeIcon
+              {
+                user.name === "Admin" && 
+                <FontAwesomeIcon
                 icon={ faEdit }
                 size="lg"
                 color={ 'gray'}
                 style={{cursor: "pointer"}}
                 onClick={() => handleEditPost(post)}
-              />
-              <FontAwesomeIcon
+                />
+              }
+
+              {
+                user.name === "Admin" &&               
+                <FontAwesomeIcon
                 icon={ faTrashAlt }
                 size="lg"
                 color={ 'gray'}
@@ -217,7 +235,9 @@ const Post = ({}) => {
                 id={post.id}
                 values={post.id}
                 onClick={() => handleDeletePost(post)}
-              />
+                />
+              }
+
             </Flex>
           </Flex>
           <Divider style={{ background: '#cecece' }}/>
