@@ -1,5 +1,8 @@
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from 'react';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
+import { getAllPosts } from '../stores/slices/posts';
 import {
   FormGroup,
   IconCheck
@@ -31,25 +34,35 @@ const InputElement = styled.input`
 `;
 
 const InputSearch = ({
-  onKeyUp,
   value,
   autofocus
 }) => {
+  const [search, setSearch] = useState("");
+  const dispatch = useDispatch();
+
+  const handleSearch = (e) => {
+    setSearch(e.target.value)
+    dispatch( getAllPosts(search) )
+  }
+
   return (
     <ContainerInputSearch>
       <FormGroup>
         <div>
           <InputElement
             type="search"
-            onKeyUp={onKeyUp}
+            onKeyUp={handleSearch}
             value={value}
             autoFocus={autofocus}
             placeholder="Buscar...."
           />
-          <IconCheck
+          {
+            !search &&
+            <IconCheck
             icon={faSearch}
             style={{ color: 'gray' }}
           />
+          }
         </div>
       </FormGroup>
       <ul />
