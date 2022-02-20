@@ -9,6 +9,7 @@ import {TAGS}  from "../constants.js/tags";
 import Picker from 'emoji-picker-react';
 import { setNewPost, setUpdatePost } from '../stores/slices/posts';
 import { useDispatch } from "react-redux";
+import Error from './Error';
 
 const HeaderPost = styled.div`
   display: flex;
@@ -83,13 +84,20 @@ const PostForm = ({setIsOpenModal, prevPost, isEdit, setIsEdit}) => {
 
   const dispatch = useDispatch();
 
-  const [tag, setTag] = useState(!isEdit? "Selecciona"  :  postToUpdate.tags[0]);
+  const [tag, setTag] = useState(!isEdit? "Selecciona"  :  postToUpdate.tags[postToUpdate.tags.length -1]);
   const [description, setDescription] = useState(!isEdit ? "" : postToUpdate.description);
   const [fileName, setFileName] = useState("");
   const [imageBase64, setImageBase64] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isError, setIsError] = useState(false);
+  const [updatedPost, setUpdatedPost] = useState({
+    description: isEdit && postToUpdate.description,
+    tag: isEdit && [postToUpdate.tags[0]],
+  })
 
   const onSubmit = (e) => {
     e.preventDefault();
+
     const post = {
       fileName,
       description,
@@ -98,40 +106,85 @@ const PostForm = ({setIsOpenModal, prevPost, isEdit, setIsEdit}) => {
     }
 
     if (!isEdit) {
+
+      if(description.trim() === "" && tag === "Selecciona" && fileName === "" && imageBase64 === "") {
+        setErrorMessage("Todos los campos son obligatorios")
+        setIsError(true);
+        console.log(isError, errorMessage, "todos")
+        return;
+      }
+      if(tag === "Selecciona"){
+        console.log("no hay tag")
+        setErrorMessage("Selecciona una categoría")
+        setIsError(true);
+        console.log(isError, errorMessage)
+        return;
+      }
+      if(!description.trim()){
+        setErrorMessage("Agrega una descripción de la publicación")
+        setIsError(true);
+        console.log(isError, errorMessage)
+        return;
+      }
+      if(fileName === "" && imageBase64 === ""){
+        setErrorMessage("Agrega una imagen por favor")
+        setIsError(true);
+        console.log(isError, errorMessage)
+        return;
+      }
+
       createPost(post)
       .then((response) => {
         dispatch(setNewPost(response))
       })
+    } else {
+      console.log(updatedPost)
+      updatePost(postToUpdate.id, updatedPost)
+      .then((response) => {
+        dispatch(setUpdatePost(response))
+      })
     }
-    updatePost(postToUpdate.id, post)
-    .then((response) => {
-      dispatch(setUpdatePost(response))
-    })
-
     e.target.reset();
     setDescription("");
     setTag("");
     setFileName("");
     setIsOpenModal(false);
+    setIsError(false);
   }
 
   const handleTag = (e) => {
     setTag(e.target.value)
+    setUpdatedPost((prevState) => ({
+      ...prevState,
+      tags: [e.target.value]
+    }))
   }
 
   const handleDescription = (e) => {
     setDescription(e.target.value)
+    setUpdatedPost((prevState) => ({
+      ...prevState,
+      description: e.target.value
+    }));
   }
 
   const handleImage = (e) => {
     const file = e.target.files[0];
     setFileName(file.name)
+    setUpdatedPost((prevState) => ({
+      ...prevState,
+      fileName: file.name
+    }))
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = (e) => {
       const result = e.target.result;
       const index = result.indexOf(",")
       setImageBase64(result.substring((index + 1), result.length))
+      setUpdatedPost((prevState) => ({
+        ...prevState,
+        imageBase64: result.substring((index + 1), result.length)
+      }))
     }
   }
 
@@ -199,7 +252,6 @@ const PostForm = ({setIsOpenModal, prevPost, isEdit, setIsEdit}) => {
             <input
             id='selectFile'
             type="file"
-            name="file"
             onChange={handleImage}
             accept='image/*'
             style={{display : "none"}}
@@ -215,6 +267,9 @@ const PostForm = ({setIsOpenModal, prevPost, isEdit, setIsEdit}) => {
         {showPicker && <Picker
           pickerStyle={{ width: '100%' }}
           onEmojiClick={onEmojiClick} />
+        }
+        {
+          isError && <Error message={errorMessage}/>
         }
         <BaseButton type="submit" text="ENVIAR" />
       </Form>
