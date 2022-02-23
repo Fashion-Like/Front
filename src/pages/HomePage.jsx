@@ -8,7 +8,6 @@ import BannerMujer from '../assets/images/banners_mujer.svg';
 import BannerHombre from '../assets/images/banners_hombres.svg';
 import BannerNiños from '../assets/images/banner_niños.svg';
 import Post from '../components/Post';
-// import NewPostModal from '../components/NewPostModal';
 import { Provider } from 'react-redux';
 import store from "../stores/index"
 
@@ -32,15 +31,14 @@ const Banners = styled.div`
   grid-area: banners;
   display: none;
     @media (min-width: 1120px) {
-    display: block;
+    display: flex;
+    gap: 2rem;
+    flex-direction: column;
   }
 `;
 
 const HomePage = () => {
-  // const [isOpenModal, setIsOpenModal] = useState(false);
-  // const [isEdit, setIsEdit] = useState(false);
-
-  // const title = isEdit ? "Editar publicación" : "Crear publicación";
+  
 
   return (
     <Provider store={store}>

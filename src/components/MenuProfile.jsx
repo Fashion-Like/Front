@@ -14,7 +14,7 @@ const Container = styled.div`
 
 const NameUser = styled.span`
   display: none;
-  @media (min-width: 1120px) {
+  @media (min-width: 768px) {
     display: block;
   }
 `;
@@ -43,7 +43,7 @@ const MenuProfile = () => {
   return (
     <Container>
       {/* <a onClick={logout}>Logout</a> */}
-      {/* <FontAwesomeIcon icon={faUser} size="lg" color={"gray"} /> */}
+      <FontAwesomeIcon icon={faUser} size="lg" color={"gray"} />
       <NameUser> {userLogged.name} </NameUser>
       <FontAwesomeIcon icon={faCaretDown} size="lg" color={"gray"} onClick={() => setNavBar(true)}/>
       {navBar &&
