@@ -38,16 +38,17 @@ const Banners = styled.div`
 
 const HomePage = () => {
 	const [category, setCategory] = useState('');
+	const [search, setSearch] = useState('');
 
 	return (
 		<Provider store={store}>
 			<GridLayout>
 				<GlobalStyle />
-				<Header />
+				<Header setSearch={setSearch} search={search} />
 				<Categories setCategory={setCategory} />
 				<Posts>
 					<Featured />
-					<Post category={category} />
+					<Post category={category} search={search} />
 				</Posts>
 				<Banners>
 					<img src={BannerMujer} alt="banner_mujer" />
