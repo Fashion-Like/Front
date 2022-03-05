@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import LogoPost from '../assets/images/logomobile.svg';
-import IconLike from '../assets/images/icons/icon-like.png';
 import { faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {
 	faThumbsUp,
 	faCommentAlt,
 	faTrashAlt,
+	faThumbsDown,
 } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import IconComments from '../assets/images/icon-comments.png';
@@ -21,6 +21,7 @@ import {
 import NewPostModal from '../components/NewPostModal';
 import { TAGS } from '../constants.js/tags';
 import ModalConfirmDelete from '../components/ModalConfirmDelete';
+import Comments from './Comments';
 
 const Container = styled.div`
 	padding: 1rem 1.5rem;
@@ -73,7 +74,7 @@ const Flex = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	gap: 1rem;
+	gap: 3rem;
 `;
 
 const Divider = styled.div`
@@ -114,7 +115,7 @@ const Button = styled.button`
 	}
 `;
 
-const Post = ({ category }) => {
+const Post = ({ category, search }) => {
 	const [isOpenModal, setIsOpenModal] = useState(false);
 	const [isOpenModalDelete, setIsOpenModalDelete] = useState(false);
 	const [isEdit, setIsEdit] = useState(false);
@@ -129,7 +130,6 @@ const Post = ({ category }) => {
 	const dispatch = useDispatch();
 
 	let { posts } = useSelector((state) => state.posts);
-	console.log(posts);
 	const openModal = () => {
 		setIsOpenModal(true);
 		getAllTags();
@@ -171,6 +171,15 @@ const Post = ({ category }) => {
 
 	if (category) {
 		posts = posts.filter((post) => post.tags[post.tags.length - 1] === category);
+	}
+
+	if (search) {
+		posts = posts.filter((post) => {
+			return (
+				post.tags[post.tags.length - 1].toLowerCase().includes(search) ||
+				post.description.toLowerCase().includes(search)
+			);
+		});
 	}
 
 	const handleLike = async (post) => {
@@ -216,75 +225,58 @@ const Post = ({ category }) => {
 				</div>
 				{posts?.length > 0 ? (
 					posts.map((post) => (
-						<ContainerPost key={post.id}>
-							<HeaderPost>
-								<DatePost>
-									<img src={LogoPost} alt="logo_fashion_like" />
-									<div>
-										<h3>Fashion Like</h3>
-										<span>{formatDate(post.creationDate)}</span>
-									</div>
-								</DatePost>
-								<TagCategory
-									color={TAGS.map(
-										(tag) => tag.value === post.tags[post.tags.length - 1] && tag.color,
-									)}
-								>
-									{post.tags[post.tags.length - 1]}
-								</TagCategory>
-							</HeaderPost>
-							<DescriptionPost>{post.description}</DescriptionPost>
-							<ImgPost src={post.pictureUrl} alt="imagen-producto" />
-							<Flex>
-								{post.reactionCount > 0 ? (
-									<Flex>
-										<img
-											src={IconLike}
-											alt="icon-like"
-											style={{ width: '30px', height: '30px' }}
-										/>
-										<span> {post.reactionCount} </span>
-									</Flex>
-								) : (
-									<div></div>
-								)}
+						<div key={post.id}>
+							<ContainerPost>
+								<HeaderPost>
+									<DatePost>
+										<img src={LogoPost} alt="logo_fashion_like" />
+										<div>
+											<h3>Fashion Like</h3>
+											<span>{formatDate(post.creationDate)}</span>
+										</div>
+									</DatePost>
+									<TagCategory
+										color={TAGS.map(
+											(tag) => tag.value === post.tags[post.tags.length - 1] && tag.color,
+										)}
+									>
+										{post.tags[post.tags.length - 1]}
+									</TagCategory>
+								</HeaderPost>
+								<DescriptionPost>{post.description}</DescriptionPost>
+								<ImgPost src={post.pictureUrl} alt="imagen-producto" />
 								<Flex>
-									{user.name === 'Admin' && (
-										<FontAwesomeIcon
-											icon={faEdit}
-											size="lg"
-											color={'gray'}
-											style={{ cursor: 'pointer' }}
-											onClick={() => handleEditPost(post)}
-										/>
-									)}
+									<Flex style={{ cursor: 'pointer' }}>
+										<FontAwesomeIcon icon={faThumbsUp} size="2x" color={'gray'} />
+										<FontAwesomeIcon icon={faThumbsDown} size="2x" color={'gray'} />
+										<FontAwesomeIcon icon={faCommentAlt} size="2x" color={'gray'} />
+									</Flex>
 
-									{user.name === 'Admin' && (
-										<FontAwesomeIcon
-											icon={faTrashAlt}
-											size="lg"
-											color={'gray'}
-											style={{ cursor: 'pointer' }}
-											id={post.id}
-											values={post.id}
-											onClick={() => handleDeletePost(post)}
-										/>
-									)}
+									<Flex style={{ cursor: 'pointer' }}>
+										{user.name === 'Admin' && (
+											<FontAwesomeIcon
+												icon={faEdit}
+												size="2x"
+												color={'gray'}
+												onClick={() => handleEditPost(post)}
+											/>
+										)}
+
+										{user.name === 'Admin' && (
+											<FontAwesomeIcon
+												icon={faTrashAlt}
+												size="2x"
+												color={'gray'}
+												id={post.id}
+												values={post.id}
+												onClick={() => handleDeletePost(post)}
+											/>
+										)}
+									</Flex>
 								</Flex>
-							</Flex>
-							<Divider style={{ background: '#cecece' }} />
-							<FooterPost>
-								<Flex style={{ cursor: 'pointer' }} onClick={() => handleLike(post)}>
-									<FontAwesomeIcon icon={faThumbsUp} size="lg" color={'gray'} />
-									<span> {post.userReaction === 1 ? 'No me gusta' : 'Me gusta'} </span>
-								</Flex>
-								<Flex style={{ cursor: 'pointer' }}>
-									<FontAwesomeIcon icon={faCommentAlt} size="lg" color={'gray'} />
-									<span>Comentar</span>
-								</Flex>
-							</FooterPost>
-							<Divider style={{ background: '#cecece' }} />
-						</ContainerPost>
+							</ContainerPost>
+							{/* <Comments key={post.id} /> */}
+						</div>
 					))
 				) : (
 					<p style={{ textAlign: 'center', marginTop: '2rem', fontSize: '1.5rem' }}>
