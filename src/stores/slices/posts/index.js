@@ -13,7 +13,6 @@ export const postsSlice = createSlice({
 		setPostById: (state, action) => {
 			state.posts.map((item) => {
 				if (item.id === action.payload.id) {
-					console.log(action.payload);
 					return action.payload;
 				}
 			});
@@ -25,13 +24,17 @@ export const postsSlice = createSlice({
 			state.posts = state.posts.filter((item) => item.id !== action.payload.id);
 		},
 		setNewPost: (state, action) => {
-			state.posts.push(action.payload);
+			return {
+				...state,
+				posts: [action.payload, ...state.posts],
+			};
 		},
 		setUpdatePost: (state, action) => {
-			state.posts.map((item) => {
+			state.posts = state.posts.map((item) => {
 				if (item.id === action.payload.id) {
-					item = action;
+					return (item = action.payload);
 				}
+				return item;
 			});
 		},
 		// setReactionPost: (state, action) => {
