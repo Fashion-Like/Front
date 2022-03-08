@@ -1,0 +1,9 @@
+version: "3.8"
+services: 
+  backend:
+    image: "danny247/fashion-like-backend"
+    container_name: fashionlike
+    tty: true 
+    ports:
+      - '44360:80'
+#docker-compose up

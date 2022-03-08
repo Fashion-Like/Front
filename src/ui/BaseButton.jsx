@@ -1,14 +1,21 @@
-import { ButtonElement } from "../assets/styledForm";
+import { ButtonElement } from '../assets/css/styledForm';
 
 const BaseButton = ({
+  type,
   text,
   outlined = false,
   size,
   fill,
-  expanded = true
+  expanded = true,
+  disabled = true
 }) => {
   return (
-    <ButtonElement outlined={outlined} expanded={expanded} >
+    <ButtonElement
+      outlined={outlined}
+      expanded={expanded}
+      disabled={!disabled}
+      type={type}
+    >
       {text}
     </ButtonElement>
   );
