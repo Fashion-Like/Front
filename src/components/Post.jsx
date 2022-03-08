@@ -31,7 +31,7 @@ const ContainerPost = styled.div`
 	padding: 1rem 1.5rem;
 	background: #ffffff;
 	border-radius: 10px;
-	margin: 1.5rem;
+	margin: 0.5rem 1.5rem;
 `;
 
 const Title = styled.h2`
@@ -122,6 +122,7 @@ const Post = ({ category, search }) => {
 	const [prevPost, setPrevPost] = useState({});
 	const [statusLike, setStatusLike] = useState(false);
 	const [currentPost, setCurrentPost] = useState({});
+	const [isOpenComment, setIsOpenComment] = useState(false);
 
 	const user = JSON.parse(localStorage.getItem('user'));
 
@@ -194,6 +195,10 @@ const Post = ({ category, search }) => {
 		});
 	};
 
+	const handleNewComment = () => {
+		setIsOpenComment(true);
+	};
+
 	return (
 		posts && (
 			<Container>
@@ -247,16 +252,21 @@ const Post = ({ category, search }) => {
 								<ImgPost src={post.pictureUrl} alt="imagen-producto" />
 								<Flex>
 									<Flex style={{ cursor: 'pointer' }}>
-										<FontAwesomeIcon icon={faThumbsUp} size="2x" color={'gray'} />
-										<FontAwesomeIcon icon={faThumbsDown} size="2x" color={'gray'} />
-										<FontAwesomeIcon icon={faCommentAlt} size="2x" color={'gray'} />
+										<FontAwesomeIcon icon={faThumbsUp} size="lg" color={'gray'} />
+										<FontAwesomeIcon icon={faThumbsDown} size="lg" color={'gray'} />
+										<FontAwesomeIcon
+											icon={faCommentAlt}
+											size="lg"
+											color={'gray'}
+											onClick={() => handleNewComment(post.id)}
+										/>
 									</Flex>
 
 									<Flex style={{ cursor: 'pointer' }}>
 										{user.name === 'Admin' && (
 											<FontAwesomeIcon
 												icon={faEdit}
-												size="2x"
+												size="lg"
 												color={'gray'}
 												onClick={() => handleEditPost(post)}
 											/>
@@ -265,7 +275,7 @@ const Post = ({ category, search }) => {
 										{user.name === 'Admin' && (
 											<FontAwesomeIcon
 												icon={faTrashAlt}
-												size="2x"
+												size="lg"
 												color={'gray'}
 												id={post.id}
 												values={post.id}
@@ -275,7 +285,7 @@ const Post = ({ category, search }) => {
 									</Flex>
 								</Flex>
 							</ContainerPost>
-							{/* <Comments key={post.id} /> */}
+							{isOpenComment && <Comments key={post.id} postId={post.id} />}
 						</div>
 					))
 				) : (
