@@ -133,6 +133,7 @@ const Post = ({ category, search }) => {
 	let { posts } = useSelector((state) => state.posts);
 	const openModal = () => {
 		setIsOpenModal(true);
+		setIsEdit(false);
 		getAllTags();
 	};
 
