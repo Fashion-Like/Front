@@ -1,82 +1,15 @@
 import { useState, useRef } from 'react';
 import styled from 'styled-components';
-import BaseButton from '../ui/BaseButton';
-import LogoPost from '../assets/images/logomobile.svg';
+import BaseButton from '../../../ui/BaseButton';
+import LogoPost from '../../../assets/images/logomobile.svg';
 import { faImage, faLaugh } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { createPost, updatePost } from '../services/PostService';
-import { TAGS } from '../constants.js/tags';
+import { createPost, updatePost } from '../../../services/PostService';
+import { TAGS } from '../../../constants.js/tags';
 import Picker from 'emoji-picker-react';
-import { setNewPost, setUpdatePost } from '../stores/slices/posts';
+import { setNewPost, setUpdatePost } from '../../../stores/slices/posts';
 import { useDispatch } from 'react-redux';
-import Error from './Error';
-
-const HeaderPost = styled.div`
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 1rem;
-`;
-
-const Select = styled.select`
-	height: 35px;
-	background: white;
-	outline: none;
-	color: gray;
-	padding-left: 5px;
-	font-size: 14px;
-	border: none;
-	margin-left: 10px;
-
-	option {
-		color: black;
-		background: white;
-		display: flex;
-		white-space: pre;
-		min-height: 20px;
-		padding: 0px 2px 1px;
-	}
-`;
-
-const Textarea = styled.textarea`
-	outline: none;
-	resize: none;
-	overflow: hidden;
-	line-height: 1.5;
-	color: #6e6b7b;
-	border: none;
-	border-radius: 10px;
-	background-color: #f3f3f3;
-	padding: 0.5rem;
-	font-size: 14px;
-	font-weight: 400;
-	margin-bottom: 0.5rem;
-	padding: 0.5rem;
-	width: 100%;
-	height: 100px;
-`;
-
-const DatePost = styled.div`
-	display: flex;
-	gap: 0.5rem;
-	align-items: center;
-	font-size: 14px;
-`;
-
-const Form = styled.form`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-`;
-
-const Icons = styled.div`
-	align-self: end;
-	display: flex;
-	gap: 1rem;
-	margin-bottom: 1rem;
-	cursor: pointer;
-	z-index: 1;
-`;
+import Error from '../../../components/Error';
 
 const PostForm = ({ setIsOpenModal, prevPost, isEdit, setIsEdit }) => {
 	const postToUpdate = prevPost.payload;
@@ -256,5 +189,72 @@ const PostForm = ({ setIsOpenModal, prevPost, isEdit, setIsEdit }) => {
 		</div>
 	);
 };
+
+const HeaderPost = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+`;
+
+const Select = styled.select`
+	height: 35px;
+	background: white;
+	outline: none;
+	color: gray;
+	padding-left: 5px;
+	font-size: 14px;
+	border: none;
+	margin-left: 10px;
+
+	option {
+		color: black;
+		background: white;
+		display: flex;
+		white-space: pre;
+		min-height: 20px;
+		padding: 0px 2px 1px;
+	}
+`;
+
+const Textarea = styled.textarea`
+	outline: none;
+	resize: none;
+	overflow: hidden;
+	line-height: 1.5;
+	color: #6e6b7b;
+	border: none;
+	border-radius: 10px;
+	background-color: #f3f3f3;
+	padding: 0.5rem;
+	font-size: 14px;
+	font-weight: 400;
+	margin-bottom: 0.5rem;
+	padding: 0.5rem;
+	width: 100%;
+	height: 100px;
+`;
+
+const DatePost = styled.div`
+	display: flex;
+	gap: 0.5rem;
+	align-items: center;
+	font-size: 14px;
+`;
+
+const Form = styled.form`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`;
+
+const Icons = styled.div`
+	align-self: end;
+	display: flex;
+	gap: 1rem;
+	margin-bottom: 1rem;
+	cursor: pointer;
+	z-index: 1;
+`;
 
 export default PostForm;

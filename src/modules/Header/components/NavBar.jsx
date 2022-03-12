@@ -1,5 +1,23 @@
-import { logout } from '../stores/AccessTokenStore';
+import { logout } from '../../../stores/AccessTokenStore';
 import styled from 'styled-components';
+
+const NavBar = ({ setNavBar }) => {
+	const user = JSON.parse(localStorage.getItem('user'));
+	const closeNavBar = () => {
+		setNavBar(false);
+	};
+
+	return (
+		<nav>
+			<Nav onClick={closeNavBar}>
+				<span>¡Bienvenido!</span>
+				<span>{user.name}</span>
+				{user.name === 'Admin' && <a>Estadísticas</a>}
+				<a onClick={logout}>Salir</a>
+			</Nav>
+		</nav>
+	);
+};
 
 const Nav = styled.div`
 	width: 180px;
@@ -26,23 +44,5 @@ const Nav = styled.div`
 		}
 	}
 `;
-
-const NavBar = ({ setNavBar }) => {
-	const user = JSON.parse(localStorage.getItem('user'));
-	const closeNavBar = () => {
-		setNavBar(false);
-	};
-
-	return (
-		<nav>
-			<Nav onClick={closeNavBar}>
-				<span>¡Bienvenido!</span>
-				<span>{user.name}</span>
-				{user.name === 'Admin' && <a>Estadísticas</a>}
-				<a onClick={logout}>Salir</a>
-			</Nav>
-		</nav>
-	);
-};
 
 export default NavBar;
