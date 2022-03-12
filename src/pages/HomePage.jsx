@@ -11,6 +11,44 @@ import Post from '../components/Post';
 import { Provider } from 'react-redux';
 import store from '../stores/index';
 
+const HomePage = () => {
+	const [category, setCategory] = useState('');
+	const [search, setSearch] = useState('');
+	const [isOpenModal, setIsOpenModal] = useState(false);
+	const [isEdit, setIsEdit] = useState(false);
+
+	return (
+		<Provider store={store}>
+			<GridLayout>
+				<GlobalStyle />
+				<Header
+					setSearch={setSearch}
+					search={search}
+					setIsOpenModal={setIsOpenModal}
+					setIsEdit={setIsEdit}
+				/>
+				<Categories setCategory={setCategory} />
+				<Posts>
+					<Featured />
+					<Post
+						category={category}
+						search={search}
+						setIsOpenModal={setIsOpenModal}
+						isOpenModal={isOpenModal}
+						setIsEdit={setIsEdit}
+						isEdit={isEdit}
+					/>
+				</Posts>
+				<Banners>
+					<img src={BannerMujer} alt="banner_mujer" />
+					<img src={BannerHombre} alt="banner_hombre" />
+					<img src={BannerNiños} alt="banner_niños" />
+				</Banners>
+			</GridLayout>
+		</Provider>
+	);
+};
+
 const GridLayout = styled.div`
 	@media (min-width: 1120px) {
 		display: grid;
@@ -35,29 +73,5 @@ const Banners = styled.div`
 		flex-direction: column;
 	}
 `;
-
-const HomePage = () => {
-	const [category, setCategory] = useState('');
-	const [search, setSearch] = useState('');
-
-	return (
-		<Provider store={store}>
-			<GridLayout>
-				<GlobalStyle />
-				<Header setSearch={setSearch} search={search} />
-				<Categories setCategory={setCategory} />
-				<Posts>
-					<Featured />
-					<Post category={category} search={search} />
-				</Posts>
-				<Banners>
-					<img src={BannerMujer} alt="banner_mujer" />
-					<img src={BannerHombre} alt="banner_hombre" />
-					<img src={BannerNiños} alt="banner_niños" />
-				</Banners>
-			</GridLayout>
-		</Provider>
-	);
-};
 
 export default HomePage;

@@ -21,108 +21,14 @@ import {
 import NewPostModal from '../components/NewPostModal';
 import { TAGS } from '../constants.js/tags';
 import ModalConfirmDelete from '../components/ModalConfirmDelete';
-import Comments from './Comments';
+import CommentsModal from './CommentsModal';
 
-const Container = styled.div`
-	padding: 1rem 1.5rem;
-`;
-
-const ContainerPost = styled.div`
-	padding: 1rem 1.5rem;
-	background: #ffffff;
-	border-radius: 10px;
-	margin: 0.5rem 1.5rem;
-`;
-
-const Title = styled.h2`
-	color: #354a62;
-	font-size: 1rem;
-`;
-
-const HeaderPost = styled.div`
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 1.25rem;
-`;
-
-const DatePost = styled.div`
-	display: flex;
-	gap: 0.5rem;
-	align-items: center;
-`;
-
-const TagCategory = styled.span`
-	border: solid 2px ${(props) => props.color};
-	padding: 0.2rem;
-	border-radius: 5px;
-`;
-
-const ImgPost = styled.img`
-	/* object-fit: cover; */
-	width: 100%;
-	height: auto;
-	max-height: 80vh;
-	margin-bottom: 1.25rem;
-
-	@media (min-width: 1024px) {
-		max-height: 50vh;
-	}
-`;
-
-const Flex = styled.div`
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	gap: 3rem;
-`;
-
-const Divider = styled.div`
-	width: 220;
-	height: 1px;
-	background: #354a62;
-	margin: 1rem 0;
-`;
-
-const FooterPost = styled.div`
-	display: flex;
-	justify-content: space-around;
-	align-items: center;
-`;
-
-const DescriptionPost = styled.p`
-	margin: 0.5rem 0;
-	line-height: 1.5;
-`;
-
-const Button = styled.button`
-	height: 2.5rem;
-	width: 30%;
-	color: white;
-	border: none;
-	border-radius: 20px;
-	font-weight: bold;
-	background: linear-gradient(90deg, #073992 1.89%, #00628f 98.36%);
-	font-size: 0.9rem;
-	cursor: pointer;
-	transform: translate3d(0, 0, 0);
-	transition: all 0.3s;
-	touch-action: manipulation;
-	text-transform: uppercase;
-
-	&:hover {
-		background: linear-gradient(90deg, #003185 1.89%, #01567e 98.36%);
-	}
-`;
-
-const Post = ({ category, search }) => {
-	const [isOpenModal, setIsOpenModal] = useState(false);
+const Post = ({ category, search, setIsOpenModal, isOpenModal, setIsEdit, isEdit }) => {
 	const [isOpenModalDelete, setIsOpenModalDelete] = useState(false);
-	const [isEdit, setIsEdit] = useState(false);
+	const [isOpenModalComments, setIsOpenModalComments] = useState(false);
 	const [prevPost, setPrevPost] = useState({});
 	const [statusLike, setStatusLike] = useState(false);
 	const [currentPost, setCurrentPost] = useState({});
-	const [isOpenComment, setIsOpenComment] = useState(false);
 
 	const user = JSON.parse(localStorage.getItem('user'));
 
@@ -131,11 +37,11 @@ const Post = ({ category, search }) => {
 	const dispatch = useDispatch();
 
 	let { posts } = useSelector((state) => state.posts);
-	const openModal = () => {
-		setIsOpenModal(true);
-		setIsEdit(false);
-		getAllTags();
-	};
+	// const openModal = () => {
+	// 	setIsOpenModal(true);
+	// 	setIsEdit(false);
+	// 	getAllTags();
+	// };
 
 	useEffect(() => {
 		dispatch(getAllPosts());
@@ -171,6 +77,8 @@ const Post = ({ category, search }) => {
 		console.log(allTags);
 	};
 
+	isOpenModal && getAllTags();
+
 	if (category) {
 		posts = posts.filter((post) => post.tags[post.tags.length - 1] === category);
 	}
@@ -197,7 +105,8 @@ const Post = ({ category, search }) => {
 	};
 
 	const handleNewComment = () => {
-		setIsOpenComment(true);
+		setIsOpenModalComments(true);
+		console.log('commentario');
 	};
 
 	return (
@@ -223,11 +132,11 @@ const Post = ({ category, search }) => {
 						<img style={{ width: '20px' }} src={IconComments} alt="icon_comments" />
 						<Title>Publicaciones</Title>
 					</div>
-					{user.name === 'Admin' && (
+					{/* {user.name === 'Admin' && (
 						<Button onClick={openModal}>
 							<FontAwesomeIcon icon={faPlus} size="sm" color={'white'} /> Agregar
 						</Button>
-					)}
+					)} */}
 				</div>
 				{posts?.length > 0 ? (
 					posts.map((post) => (
@@ -286,7 +195,14 @@ const Post = ({ category, search }) => {
 									</Flex>
 								</Flex>
 							</ContainerPost>
-							{isOpenComment && <Comments key={post.id} postId={post.id} />}
+							{isOpenModalComments && (
+								<CommentsModal
+									key={post.id}
+									isOpenModal={isOpenModalComments}
+									setIsOpenModal={setIsOpenModalComments}
+									post={post}
+								/>
+							)}
 						</div>
 					))
 				) : (
@@ -319,5 +235,83 @@ const Post = ({ category, search }) => {
 		)
 	);
 };
+
+const Container = styled.div`
+	padding: 1rem 1.5rem;
+`;
+
+const ContainerPost = styled.div`
+	padding: 1rem 1.5rem;
+	background: #ffffff;
+	border-radius: 10px;
+	margin: 0.5rem 1.5rem;
+`;
+
+const Title = styled.h2`
+	color: #354a62;
+	font-size: 1rem;
+`;
+
+const HeaderPost = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1.25rem;
+`;
+
+const DatePost = styled.div`
+	display: flex;
+	gap: 0.5rem;
+	align-items: center;
+`;
+
+const TagCategory = styled.span`
+	border: solid 2px ${(props) => props.color};
+	padding: 0.2rem;
+	border-radius: 5px;
+`;
+
+const ImgPost = styled.img`
+	width: 100%;
+	height: auto;
+	max-height: 80vh;
+	margin-bottom: 1.25rem;
+
+	@media (min-width: 1024px) {
+		max-height: 50vh;
+	}
+`;
+
+const Flex = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 3rem;
+`;
+
+const DescriptionPost = styled.p`
+	margin: 0.5rem 0;
+	line-height: 1.5;
+`;
+
+const Button = styled.button`
+	height: 2.5rem;
+	width: 30%;
+	color: white;
+	border: none;
+	border-radius: 20px;
+	font-weight: bold;
+	background: linear-gradient(90deg, #073992 1.89%, #00628f 98.36%);
+	font-size: 0.9rem;
+	cursor: pointer;
+	transform: translate3d(0, 0, 0);
+	transition: all 0.3s;
+	touch-action: manipulation;
+	text-transform: uppercase;
+
+	&:hover {
+		background: linear-gradient(90deg, #003185 1.89%, #01567e 98.36%);
+	}
+`;
 
 export default Post;

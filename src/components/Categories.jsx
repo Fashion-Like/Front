@@ -1,6 +1,30 @@
 import styled from 'styled-components';
 import { TAGS } from '../constants.js/tags';
 
+const Categories = ({ setCategory }) => {
+	const handleCategory = (tag) => {
+		setCategory(tag);
+	};
+
+	return (
+		<Container>
+			<Title>Categorías</Title>
+			<Divider />
+			<Scroll>
+				{TAGS.map(
+					(item) =>
+						item.img !== '' && (
+							<Category key={item.value} onClick={() => handleCategory(item.value)}>
+								<img src={item.img} alt={item.value} />
+								<p> {item.value} </p>
+							</Category>
+						),
+				)}
+			</Scroll>
+		</Container>
+	);
+};
+
 const Container = styled.div`
   background: #FFF;
   border-radius: 20px;
@@ -8,10 +32,6 @@ const Container = styled.div`
   border: solid 0.5px #f5f5f5;
   grid-area: categories;
   margin-bottom: 1rem;
-
-  /* @media (min-width: 1120px) {
-    height: 80vh;
-  } */
 }
 `;
 const Divider = styled.div`
@@ -81,29 +101,5 @@ const Scroll = styled.div`
 		}
 	}
 `;
-
-const Categories = ({ setCategory }) => {
-	const handleCategory = (tag) => {
-		setCategory(tag);
-	};
-
-	return (
-		<Container>
-			<Title>Categorías</Title>
-			<Divider />
-			<Scroll>
-				{TAGS.map(
-					(item) =>
-						item.img !== '' && (
-							<Category key={item.value} onClick={() => handleCategory(item.value)}>
-								<img src={item.img} alt={item.value} />
-								<p> {item.value} </p>
-							</Category>
-						),
-				)}
-			</Scroll>
-		</Container>
-	);
-};
 
 export default Categories;
