@@ -7,54 +7,9 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDeleteComment, setUpdateComment } from '../stores/slices/comments';
 import ModalConfirmDelete from '../components/ModalConfirmDelete';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
-const Container = styled.div`
-	max-width: 100%;
-	position: relative;
-	height: auto;
-	padding: 0.5rem;
-	margin-left: 2rem;
-	background-color: #f5f5f5;
-	border-radius: 10px;
-	box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
-	margin-bottom: 0.7rem;
-`;
-
-const Tip = styled.span`
-	width: 0px;
-	height: 0px;
-	position: absolute;
-	background: transparent;
-	border: 10px solid #dcdcdc;
-	top: 10px;
-	left: -20px;
-	border-top-color: transparent;
-	border-left-color: transparent;
-	border-bottom-color: transparent;
-`;
-
-const Author = styled.span`
-	font-weight: bold;
-	padding: 0.5rem;
-`;
-
-const DateSpan = styled.span`
-	color: gray;
-	padding: 0.5rem;
-`;
-
-const Text = styled.p`
-	display: block;
-	width: 100%;
-	padding-left: 0.5rem;
-`;
-
-const Hr = styled.hr`
-	margin: 0.3rem;
-	color: gray;
-`;
-
-const Comment = ({ author, date, text, commentId }) => {
+const Comment = ({ comment }) => {
 	const dispatch = useDispatch();
 	const [isOpenModalDelete, setIsOpenModalDelete] = useState(false);
 
@@ -67,38 +22,36 @@ const Comment = ({ author, date, text, commentId }) => {
 		return new Intl.DateTimeFormat('es', options).format(newDate);
 	};
 
-	const handleDeleteComment = () => {
+	const openOptions = () => {
 		// setIsOpenModalDelete(true);
-		console.log('eliminar');
+		console.log('opciones de eliminar y editar');
 	};
 
-	// const confirmDeleteComment = async () => {
-	// 	const response = await deleteComment(commentId);
-	// 	response ? dispatch(setDeleteComment(commentId)) : console.log('error');
-	// };
+	const confirmDeleteComment = async () => {
+		console.log('eliminar');
+		// const response = await deleteComment(commentId);
+		// response ? dispatch(setDeleteComment(commentId)) : console.log('error');
+	};
 
 	return (
-		<Container>
-			<Tip />
-			<div>
-				<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+		<>
+			<Container>
+				<ContainerComment>
+					<h4>{comment.user}</h4>
+					<p> {comment.text} </p>
+					<span> {formatDate(comment.creationDate)} </span>
+				</ContainerComment>
+				{comment.user !== 'admin' && (
 					<div>
-						{' '}
-						<Author>{author}</Author> <DateSpan> {formatDate(date)} </DateSpan>{' '}
+						<FontAwesomeIcon
+							icon={faEllipsisV}
+							size="sm"
+							color={'gray'}
+							onClick={() => openOptions()}
+						/>
 					</div>
-					<FontAwesomeIcon icon={faEdit} size="xs" color={'gray'} />
-				</div>
-				<Hr />
-				<div style={{ display: 'flex', justifyContent: 'space-between' }}>
-					<Text>{text} </Text>
-					<FontAwesomeIcon
-						icon={faTrashAlt}
-						size="sm"
-						color={'gray'}
-						onClick={() => handleDeleteComment()}
-					/>
-				</div>
-			</div>
+				)}
+			</Container>
 			{isOpenModalDelete && (
 				<ModalConfirmDelete
 					setIsOpenModal={setIsOpenModalDelete}
@@ -108,8 +61,25 @@ const Comment = ({ author, date, text, commentId }) => {
 					confirmDeletePost={confirmDeleteComment}
 				/>
 			)}
-		</Container>
+		</>
 	);
 };
+
+const Container = styled.div`
+	display: grid;
+	grid-template-columns: 1fr 10px;
+	margin: 1rem;
+`;
+
+const ContainerComment = styled.div`
+	line-height: 1.3;
+	& h4 {
+		font-weight: bold;
+	}
+	& span {
+		color: gray;
+		font-size: 14px;
+	}
+`;
 
 export default Comment;

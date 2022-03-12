@@ -9,20 +9,6 @@ import { createComment } from '../services/CommentService';
 import { useDispatch, useSelector } from 'react-redux';
 import Comment from './Comment';
 
-const Container = styled.div`
-	margin: 0 1.5rem;
-`;
-
-const Input = styled.input`
-	display: block;
-	width: 100%;
-	padding: 0.5rem 1rem 0.4rem 1rem;
-	border: none;
-	outline: none;
-	border-bottom: 1px solid gray;
-	background: transparent;
-`;
-
 const Comments = ({ postId }) => {
 	const [dataComment, setDataComment] = useState({});
 
@@ -52,24 +38,58 @@ const Comments = ({ postId }) => {
 
 	return (
 		<Container>
-			{comments.length > 0 &&
+			{comments.length > 0 ? (
 				comments.map((comment) => {
-					return (
-						<Comment
-							key={comment.id}
-							author={comment.user}
-							text={comment.text}
-							date={comment.creationDate}
-							commentId={comment.id}
-						/>
-					);
-				})}
+					return <Comment key={comment.id} comment={comment} />;
+				})
+			) : (
+				<WithOutComments>No hay comentarios, agrega uno...</WithOutComments>
+			)}
 			<form onSubmit={handleSaveComment}>
-				<Input placeholder="Agrega un comentario..." onChange={handleTextComment} />
-				<input type="submit" value="button" hidden />
+				<ContainerInput>
+					<input placeholder="Escribe un comentario..." onChange={handleTextComment} />
+					<button type="submit" value="button">
+						Enviar
+					</button>
+				</ContainerInput>
 			</form>
 		</Container>
 	);
 };
+
+const Container = styled.div`
+	margin: 0 1.5rem;
+`;
+
+const ContainerInput = styled.div`
+	display: grid;
+	grid-template-columns: 1fr 50px;
+	margin: 2px 5px;
+	padding: 0.6rem 1rem;
+	background: lightgrey;
+	border-radius: 30px;
+	& input {
+		font-size: inherit;
+		background-color: transparent;
+		padding-left: 5px;
+		border: 0;
+		&:focus {
+			outline: none;
+		}
+	}
+	& button {
+		background: transparent;
+		border: none;
+		color: gray;
+		font-weight: bold;
+	}
+`;
+
+const WithOutComments = styled.div`
+	padding: 1rem;
+	text-align: center;
+	height: auto;
+	min-height: 350px;
+`;
 
 export default Comments;
