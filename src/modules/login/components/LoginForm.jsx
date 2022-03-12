@@ -1,13 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom';
-import BaseButton from '../ui/BaseButton';
-import Input from '../ui/Input';
-import BaseLogo from '../ui/BaseLogo';
-import { FormBox } from '../assets/css/styledForm';
-import { useUser } from '../hooks/useUser';
+import BaseButton from '../../../ui/BaseButton';
+import Input from '../../../ui/Input';
+import BaseLogo from '../../../ui/BaseLogo';
+import { FormBox } from '../../../assets/css/styledForm';
+import { useUser } from '../../../hooks/useUser';
 import { useState } from 'react';
-import { setAccessToken } from '../stores/AccessTokenStore';
-import { login, emailExists } from '../services/AuthService';
-import Error from './Error';
+import { setAccessToken } from '../../../stores/AccessTokenStore';
+import { login, emailExists } from '../../../services/AuthService';
+import Error from '../../../components/Error';
 
 const displayLastChar = 200;
 const displayLastCharDeleting = 60;
@@ -80,12 +80,6 @@ const LoginForm = () => {
 		const { errors } = state;
 		return !Object.keys(errors).some((error) => errors[error]);
 	};
-
-	// const [infoModal, setInfoModal] = useState({
-	// 	type: '',
-	// 	title: '',
-	// 	message: '',
-	// });
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -186,7 +180,7 @@ const LoginForm = () => {
 						marginBottom: '1rem',
 					}}
 				>
-					¡Regístrate!
+					¡Inicia sesión!
 				</h1>
 				<form onSubmit={onSubmit}>
 					<Input
@@ -230,7 +224,7 @@ const LoginForm = () => {
 								marginLeft: '0.6rem',
 								color: '#073992',
 							}}
-							to="/signup"
+							to="/register"
 						>
 							Regístrate.
 						</Link>
