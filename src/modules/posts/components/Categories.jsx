@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { TAGS } from '../constants.js/tags';
+import { TAGS } from '../../../constants.js/tags';
 
 const Categories = ({ setCategory }) => {
 	const handleCategory = (tag) => {

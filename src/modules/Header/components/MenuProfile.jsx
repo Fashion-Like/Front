@@ -1,24 +1,10 @@
 import { faCaretDown, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
-import { logout } from '../stores/AccessTokenStore';
+// import { logout } from '../../../stores/AccessTokenStore';
 import { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import { faBuilding } from '@fortawesome/free-regular-svg-icons';
-
-const Container = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	gap: 1rem;
-`;
-
-const NameUser = styled.span`
-	display: none;
-	@media (min-width: 768px) {
-		display: block;
-	}
-`;
 
 const MenuProfile = () => {
 	const [userLogged, setUserLogged] = useState({});
@@ -51,5 +37,19 @@ const MenuProfile = () => {
 		</Container>
 	);
 };
+
+const Container = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 1rem;
+`;
+
+const NameUser = styled.span`
+	display: none;
+	@media (min-width: 768px) {
+		display: block;
+	}
+`;
 
 export default MenuProfile;

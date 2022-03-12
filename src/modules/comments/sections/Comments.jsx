@@ -4,10 +4,10 @@ import {
 	setNewComment,
 	setUpdateComment,
 	getAllComments,
-} from '../stores/slices/comments';
-import { createComment } from '../services/CommentService';
+} from '../../../stores/slices/comments';
+import { createComment } from '../../../services/CommentService';
 import { useDispatch, useSelector } from 'react-redux';
-import Comment from './Comment';
+import Comment from '../components/Comment';
 
 const Comments = ({ postId }) => {
 	const [dataComment, setDataComment] = useState({});
@@ -33,18 +33,19 @@ const Comments = ({ postId }) => {
 		createComment(dataComment).then((response) => {
 			dispatch(setNewComment(response));
 		});
-		setDataComment({});
 	};
 
 	return (
 		<Container>
-			{comments.length > 0 ? (
-				comments.map((comment) => {
-					return <Comment key={comment.id} comment={comment} />;
-				})
-			) : (
-				<WithOutComments>No hay comentarios, agrega uno...</WithOutComments>
-			)}
+			<Scroll>
+				{comments.length > 0 ? (
+					comments.map((comment) => {
+						return <Comment key={comment.id} comment={comment} />;
+					})
+				) : (
+					<WithOutComments>No hay comentarios, agrega uno...</WithOutComments>
+				)}
+			</Scroll>
 			<form onSubmit={handleSaveComment}>
 				<ContainerInput>
 					<input placeholder="Escribe un comentario..." onChange={handleTextComment} />
@@ -59,6 +60,22 @@ const Comments = ({ postId }) => {
 
 const Container = styled.div`
 	margin: 0 1.5rem;
+`;
+
+const Scroll = styled.div`
+	overflow: auto;
+	max-height: 70vh;
+	&::-webkit-scrollbar {
+		width: 6px;
+	}
+	&::-webkit-scrollbar-track {
+		background: #ececec;
+		border-radius: 30px;
+	}
+	&::-webkit-scrollbar-thumb {
+		background: #ccd7e0;
+		border-radius: 30px;
+	}
 `;
 
 const ContainerInput = styled.div`

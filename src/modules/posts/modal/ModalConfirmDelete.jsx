@@ -3,7 +3,7 @@ import {
 	HeadModal,
 	BodyModal,
 	Backdrop,
-} from '../assets/css/styledModal';
+} from '../../../assets/css/styledModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuestionCircle } from '@fortawesome/free-regular-svg-icons';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';

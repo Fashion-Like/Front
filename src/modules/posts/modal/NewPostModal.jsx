@@ -1,13 +1,8 @@
-import { ContainerModal, HeadModal, Backdrop } from '../assets/css/styledModal';
+import { ContainerModal, HeadModal, Backdrop } from '../../../assets/css/styledModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import PostForm from './PostForm';
+import PostForm from '../components/PostForm';
 import styled from 'styled-components';
-
-const BodyModal = styled.div`
-	margin-top: 1rem;
-	height: auto;
-`;
 
 const NewPostModal = ({
 	title,
@@ -49,5 +44,10 @@ const NewPostModal = ({
 		</>
 	);
 };
+
+const BodyModal = styled.div`
+	margin-top: 1rem;
+	height: auto;
+`;
 
 export default NewPostModal;

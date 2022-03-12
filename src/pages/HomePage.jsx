@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Header from '../components/Header';
-import Categories from '../components/Categories';
-import Featured from '../components/Featured';
+import Header from '../modules/Header/sections/Header';
+import Categories from '../modules/posts/components/Categories';
+import Featured from '../modules/posts/components/Featured';
 import GlobalStyle from '../assets/css/globalStyles';
 import BannerMujer from '../assets/images/banners_mujer.svg';
 import BannerHombre from '../assets/images/banners_hombres.svg';
 import BannerNiños from '../assets/images/banner_niños.svg';
-import Post from '../components/Post';
+import SectionPosts from '../modules/posts/sections/SectionPosts';
 import { Provider } from 'react-redux';
 import store from '../stores/index';
 
@@ -30,7 +30,7 @@ const HomePage = () => {
 				<Categories setCategory={setCategory} />
 				<Posts>
 					<Featured />
-					<Post
+					<SectionPosts
 						category={category}
 						search={search}
 						setIsOpenModal={setIsOpenModal}

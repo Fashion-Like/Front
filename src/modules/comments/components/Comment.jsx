@@ -1,16 +1,11 @@
 import styled from 'styled-components';
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
-import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { deleteComment, updateComment } from '../services/CommentService';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setDeleteComment, setUpdateComment } from '../stores/slices/comments';
-import ModalConfirmDelete from '../components/ModalConfirmDelete';
+import ModalConfirmDelete from '../../../modules/posts/modal/ModalConfirmDelete';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
 const Comment = ({ comment }) => {
-	const dispatch = useDispatch();
 	const [isOpenModalDelete, setIsOpenModalDelete] = useState(false);
 
 	const formatDate = (date) => {

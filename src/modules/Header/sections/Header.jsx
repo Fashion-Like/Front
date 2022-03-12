@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import LogoImg from '../assets/images/logo.png';
-import LogoMobileImg from '../assets/images/logo_mobile.svg';
-import InputSearch from '../ui/InputSearch';
-import MenuProfile from './MenuProfile';
+import LogoImg from '../../../assets/images/logo.png';
+import LogoMobileImg from '../../../assets/images/logo_mobile.svg';
+import InputSearch from '../../../ui/InputSearch';
+import MenuProfile from '../components/MenuProfile';
 import { faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -86,10 +86,5 @@ const IconMobile = styled.div`
 		display: none;
 	}
 `;
-
-// const Button = styled.button`
-// 	background: blue;
-
-// `;
 
 export default Header;

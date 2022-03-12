@@ -1,10 +1,10 @@
-import { HeadModal, Backdrop } from '../assets/css/styledModal';
-import LogoPost from '../assets/images/logomobile.svg';
+import { HeadModal, Backdrop } from '../../../assets/css/styledModal';
+import LogoPost from '../../../assets/images/logomobile.svg';
 import styled from 'styled-components';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import Comments from './Comments';
+import Comments from '../sections/Comments';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { TAGS } from '../constants.js/tags';
+import { TAGS } from '../../../constants.js/tags';
 
 const CommentsModal = ({ isOpenModal, setIsOpenModal, post }) => {
 	const closeModal = () => {
