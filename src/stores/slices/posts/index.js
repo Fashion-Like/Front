@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getPosts, getPostsFeatured } from '../../../services/PostService';
+import { getPosts } from '../../../services/PostService';
 
 export const postsSlice = createSlice({
 	name: 'posts',
@@ -37,13 +37,6 @@ export const postsSlice = createSlice({
 				return item;
 			});
 		},
-		// setReactionPost: (state, action) => {
-		// 	state.posts.map((item) => {
-		// 		if (item.id === action.payload.id) {
-		// 			item = action;
-		// 		}
-		// 	});
-		// },
 	},
 });
 
@@ -54,15 +47,6 @@ export const getAllPosts = (search) => (dispatch) => {
 		})
 		.catch((error) => console.log(error));
 };
-
-// export const getAllPostsFeatured = () => (dispatch) => {
-//   getPostsFeatured()
-//     .then((response) => {
-//       console.log(response);
-//       dispatch(setPostsFeatured(response));
-//     })
-//     .catch((error) => console.log(error));
-// };
 
 export const {
 	setPosts,
