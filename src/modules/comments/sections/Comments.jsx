@@ -8,14 +8,19 @@ import {
 import { createComment } from '../../../services/CommentService';
 import { useDispatch, useSelector } from 'react-redux';
 import Comment from '../components/Comment';
+import { updateComment } from '../../../services/CommentService';
 
 const Comments = ({ postId }) => {
 	const [dataComment, setDataComment] = useState({});
+	const [updateDataComment, setUpdteDataComment] = useState({});
+	const [isEditComment, setIsEditComment] = useState(false);
+	const [commentId, setCommentId] = useState('');
+	const [editedComment, setEditedComment] = useState(false);
+	// const [isOpenModalComments, setIsOpenModalComments] = useState(false);
 
 	const dispatch = useDispatch();
 
 	let { comments } = useSelector((state) => state.comments);
-	console.log(comments);
 	useEffect(() => {
 		dispatch(getAllComments(postId));
 	}, [dispatch]);
@@ -25,14 +30,27 @@ const Comments = ({ postId }) => {
 			postId,
 			text: e.target.value,
 		};
-		setDataComment(comment);
+		!isEditComment ? setDataComment(comment) : setUpdteDataComment(comment);
 	};
 
 	const handleSaveComment = (e) => {
 		e.preventDefault();
-		createComment(dataComment).then((response) => {
-			dispatch(setNewComment(response));
-		});
+		if (!isEditComment) {
+			createComment(dataComment).then((response) => {
+				dispatch(setNewComment(response));
+			});
+		} else {
+			updateComment(commentId, updateDataComment).then((response) => {
+				setEditedComment(true);
+				dispatch(setUpdateComment(response));
+			});
+		}
+		setDataComment({});
+	};
+
+	const handleUpdateComment = (id) => {
+		setIsEditComment(true);
+		setCommentId(id);
 	};
 
 	return (
@@ -40,7 +58,17 @@ const Comments = ({ postId }) => {
 			<Scroll>
 				{comments.length > 0 ? (
 					comments.map((comment) => {
-						return <Comment key={comment.id} comment={comment} />;
+						return (
+							<Comment
+								key={comment.id}
+								comment={comment}
+								isEditComment={isEditComment}
+								setIsEditComment={setIsEditComment}
+								handleUpdateComment={handleUpdateComment}
+								editedComment={editedComment}
+								setEditedComment={setEditedComment}
+							/>
+						);
 					})
 				) : (
 					<WithOutComments>No hay comentarios, agrega uno...</WithOutComments>
@@ -48,7 +76,12 @@ const Comments = ({ postId }) => {
 			</Scroll>
 			<form onSubmit={handleSaveComment}>
 				<ContainerInput>
-					<input placeholder="Escribe un comentario..." onChange={handleTextComment} />
+					<input
+						placeholder={
+							isEditComment ? 'Edita tu comentario...' : 'Escribe un comentario...'
+						}
+						onChange={handleTextComment}
+					/>
 					<button type="submit" value="button">
 						Enviar
 					</button>
@@ -65,6 +98,8 @@ const Container = styled.div`
 const Scroll = styled.div`
 	overflow: auto;
 	max-height: 70vh;
+	min-height: 425px;
+
 	&::-webkit-scrollbar {
 		width: 6px;
 	}
@@ -106,7 +141,6 @@ const WithOutComments = styled.div`
 	padding: 1rem;
 	text-align: center;
 	height: auto;
-	min-height: 350px;
 `;
 
 export default Comments;

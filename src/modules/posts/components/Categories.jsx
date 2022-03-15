@@ -35,7 +35,7 @@ const Container = styled.div`
 }
 `;
 const Divider = styled.div`
-	width: 220;
+	width: 220px;
 	height: 1px;
 	background: #f5f5f5;
 	margin: 1rem 0;

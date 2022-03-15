@@ -17,13 +17,8 @@ const Header = ({ setSearch, search, setIsOpenModal, setIsEdit }) => {
 	};
 	return (
 		<HeaderElement>
-			<Logo src={LogoImg} alt="logo" onClick={redirectTo} style={{ cursor: 'pointer' }} />
-			<LogoMobile
-				src={LogoMobileImg}
-				onClick={redirectTo}
-				alt="logo"
-				style={{ cursor: 'pointer' }}
-			/>
+			<Logo src={LogoImg} alt="logo" onClick={redirectTo} />
+			<LogoMobile src={LogoMobileImg} onClick={redirectTo} alt="logo" />
 
 			<InputSearch setSearch={setSearch} search={search} />
 			<IconMobile>
@@ -62,11 +57,13 @@ const HeaderElement = styled.div`
 		height: 35px;
 		border: none;
 		border-radius: 50%;
+		cursor: pointer;
 	}
 `;
 
 const Logo = styled.img`
 	display: none;
+	cursor: pointer;
 	@media (min-width: 1120px) {
 		display: block;
 	}
@@ -74,6 +71,7 @@ const Logo = styled.img`
 
 const LogoMobile = styled.img`
 	display: block;
+	cursor: pointer;
 	@media (min-width: 1120px) {
 		display: none;
 	}

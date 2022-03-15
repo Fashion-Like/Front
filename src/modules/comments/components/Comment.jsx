@@ -1,61 +1,67 @@
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import ModalConfirmDelete from '../../../modules/posts/modal/ModalConfirmDelete';
+import { useState } from 'react';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import OptionsComments from './OptionsComments';
+import { deleteComment } from '../../../services/CommentService';
+import { setDeleteComment } from '../../../stores/slices/comments';
+import { formatDate } from '../../../helpers/FormatDate';
 
-const Comment = ({ comment }) => {
-	const [isOpenModalDelete, setIsOpenModalDelete] = useState(false);
-
-	const formatDate = (date) => {
-		const newDate = new Date(date);
-		const options = {
-			month: 'long',
-			day: '2-digit',
-		};
-		return new Intl.DateTimeFormat('es', options).format(newDate);
-	};
+const Comment = ({
+	comment,
+	isEditComment,
+	setIsEditComment,
+	handleUpdateComment,
+	editedComment,
+	setEditedComment,
+}) => {
+	const [openOptionsComments, setOpenOptionsComments] = useState(false);
 
 	const openOptions = () => {
-		// setIsOpenModalDelete(true);
-		console.log('opciones de eliminar y editar');
+		setOpenOptionsComments(true);
 	};
 
-	const confirmDeleteComment = async () => {
-		console.log('eliminar');
-		// const response = await deleteComment(commentId);
-		// response ? dispatch(setDeleteComment(commentId)) : console.log('error');
+	const handleDeleteComment = async () => {
+		try {
+			await deleteComment(comment.id);
+			dispatch(setDeleteComment(comment));
+		} catch (error) {
+			console.log(error);
+		}
 	};
-
 	return (
 		<>
+			{openOptionsComments && (
+				<OptionsComments
+					setOpenOptionsComments={setOpenOptionsComments}
+					handleDeleteComment={handleDeleteComment}
+					handleUpdateComment={handleUpdateComment}
+					isEditComment={isEditComment}
+					setIsEditComment={setIsEditComment}
+					comment={comment}
+					editedComment={editedComment}
+					setEditedComment={setEditedComment}
+					setIsEditComment={setIsEditComment}
+				/>
+			)}
 			<Container>
 				<ContainerComment>
 					<h4>{comment.user}</h4>
 					<p> {comment.text} </p>
 					<span> {formatDate(comment.creationDate)} </span>
 				</ContainerComment>
-				{comment.user !== 'admin' && (
+				{comment.isOwn && (
 					<div>
 						<FontAwesomeIcon
 							icon={faEllipsisV}
 							size="sm"
 							color={'gray'}
-							onClick={() => openOptions()}
+							onClick={openOptions}
 						/>
 					</div>
 				)}
 			</Container>
-			{isOpenModalDelete && (
-				<ModalConfirmDelete
-					setIsOpenModal={setIsOpenModalDelete}
-					isOpenModal={isOpenModalDelete}
-					title={'Eliminar comentario'}
-					message={'¿Estás seguro que deseas eliminar este comentario?'}
-					confirmDeletePost={confirmDeleteComment}
-				/>
-			)}
 		</>
 	);
 };
@@ -68,6 +74,7 @@ const Container = styled.div`
 
 const ContainerComment = styled.div`
 	line-height: 1.3;
+
 	& h4 {
 		font-weight: bold;
 	}

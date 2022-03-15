@@ -9,19 +9,13 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TAGS } from '../../../constants.js/tags';
+import { formatDate } from '../../../helpers/FormatDate';
 
-const Post = ({ post, handleDeletePost, handleNewComment, handleEditPost }) => {
+const Post = ({ post, handleDeletePost, handleEditPost, handleNewComment, origin }) => {
 	const user = JSON.parse(localStorage.getItem('user'));
-	const formatDate = (date) => {
-		const newDate = new Date(date);
-		const options = {
-			month: 'long',
-			day: '2-digit',
-		};
-		return new Intl.DateTimeFormat('es', options).format(newDate);
-	};
+
 	return (
-		<Container>
+		<ContainerPost>
 			<HeaderPost>
 				<DatePost>
 					<img src={LogoPost} alt="logo_fashion_like" />
@@ -39,9 +33,9 @@ const Post = ({ post, handleDeletePost, handleNewComment, handleEditPost }) => {
 				</TagCategory>
 			</HeaderPost>
 			<DescriptionPost>{post.description}</DescriptionPost>
-			<ImgPost src={post.pictureUrl} alt="imagen-producto" />
+			<ImgPost src={post.pictureUrl} alt="imagen-producto" origin={origin} />
 			<Flex>
-				<Flex style={{ cursor: 'pointer' }}>
+				<Flex>
 					<FontAwesomeIcon icon={faThumbsUp} size="lg" color={'gray'} />
 					<FontAwesomeIcon icon={faThumbsDown} size="lg" color={'gray'} />
 					<FontAwesomeIcon
@@ -52,7 +46,7 @@ const Post = ({ post, handleDeletePost, handleNewComment, handleEditPost }) => {
 					/>
 				</Flex>
 
-				<Flex style={{ cursor: 'pointer' }}>
+				<Flex>
 					{user.name === 'Admin' && (
 						<FontAwesomeIcon
 							icon={faEdit}
@@ -74,11 +68,11 @@ const Post = ({ post, handleDeletePost, handleNewComment, handleEditPost }) => {
 					)}
 				</Flex>
 			</Flex>
-		</Container>
+		</ContainerPost>
 	);
 };
 
-const Container = styled.div`
+const ContainerPost = styled.div`
 	padding: 1rem 1.5rem;
 	background: #ffffff;
 	border-radius: 10px;
@@ -111,7 +105,7 @@ const ImgPost = styled.img`
 	margin-bottom: 1.25rem;
 
 	@media (min-width: 1024px) {
-		max-height: 50vh;
+		max-height: ${(props) => (props.origin === 'comments' ? '200px' : '50vh')};
 	}
 `;
 
@@ -120,6 +114,7 @@ const Flex = styled.div`
 	justify-content: space-between;
 	align-items: center;
 	gap: 3rem;
+	cursor: pointer;
 `;
 
 const DescriptionPost = styled.p`
