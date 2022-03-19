@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import {
 	setNewComment,
@@ -16,7 +16,6 @@ const Comments = ({ postId }) => {
 	const [isEditComment, setIsEditComment] = useState(false);
 	const [commentId, setCommentId] = useState('');
 	const [editedComment, setEditedComment] = useState(false);
-	// const [isOpenModalComments, setIsOpenModalComments] = useState(false);
 
 	const dispatch = useDispatch();
 
@@ -53,6 +52,14 @@ const Comments = ({ postId }) => {
 		setCommentId(id);
 	};
 
+	const inputElement = useRef(null);
+
+	useEffect(() => {
+		if (isEditComment) {
+			inputElement.current.focus();
+		}
+	}, [isEditComment]);
+
 	return (
 		<Container>
 			<Scroll>
@@ -75,11 +82,13 @@ const Comments = ({ postId }) => {
 				)}
 			</Scroll>
 			<form onSubmit={handleSaveComment}>
-				<ContainerInput>
+				<ContainerInput isEdit={isEditComment}>
 					<input
 						placeholder={
 							isEditComment ? 'Edita tu comentario...' : 'Escribe un comentario...'
 						}
+						ref={inputElement}
+						autoFocus
 						onChange={handleTextComment}
 					/>
 					<button type="submit" value="button">
@@ -118,8 +127,11 @@ const ContainerInput = styled.div`
 	grid-template-columns: 1fr 50px;
 	margin: 2px 5px;
 	padding: 0.6rem 1rem;
-	background: lightgrey;
+	background: #e5e5e5;
 	border-radius: 30px;
+	border: solid 2px ${(props) => (props.isEdit ? 'rgba(82,168,236,.8)' : 'none')};
+	box-shadow: ${(props) => (props.isEdit ? '0 0 8px rgba(82,168,236,.6)' : 'none')};
+
 	& input {
 		font-size: inherit;
 		background-color: transparent;

@@ -1,28 +1,25 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
-import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
-import OptionsComments from './OptionsComments';
 import { deleteComment } from '../../../services/CommentService';
 import { setDeleteComment } from '../../../stores/slices/comments';
 import { formatDate } from '../../../helpers/FormatDate';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 
 const Comment = ({
 	comment,
-	isEditComment,
 	setIsEditComment,
 	handleUpdateComment,
 	editedComment,
 	setEditedComment,
 }) => {
-	const [openOptionsComments, setOpenOptionsComments] = useState(false);
-
-	const openOptions = () => {
-		setOpenOptionsComments(true);
-	};
+	const [isHover, setIsHover] = useState(false);
+	const dispatch = useDispatch();
 
 	const handleDeleteComment = async () => {
+		console.log('borrar');
 		try {
 			await deleteComment(comment.id);
 			dispatch(setDeleteComment(comment));
@@ -30,36 +27,40 @@ const Comment = ({
 			console.log(error);
 		}
 	};
+
+	useEffect(() => {
+		if (editedComment) {
+			setEditedComment(false);
+			setIsEditComment(false);
+		}
+	}, [editedComment]);
+
 	return (
 		<>
-			{openOptionsComments && (
-				<OptionsComments
-					setOpenOptionsComments={setOpenOptionsComments}
-					handleDeleteComment={handleDeleteComment}
-					handleUpdateComment={handleUpdateComment}
-					isEditComment={isEditComment}
-					setIsEditComment={setIsEditComment}
-					comment={comment}
-					editedComment={editedComment}
-					setEditedComment={setEditedComment}
-					setIsEditComment={setIsEditComment}
-				/>
-			)}
-			<Container>
+			<Container
+				onMouseEnter={() => setIsHover(true)}
+				onMouseLeave={() => setIsHover(false)}
+			>
 				<ContainerComment>
 					<h4>{comment.user}</h4>
 					<p> {comment.text} </p>
 					<span> {formatDate(comment.creationDate)} </span>
 				</ContainerComment>
-				{comment.isOwn && (
-					<div>
+				{comment.isOwn && isHover && (
+					<Options>
 						<FontAwesomeIcon
-							icon={faEllipsisV}
+							icon={faEdit}
 							size="sm"
 							color={'gray'}
-							onClick={openOptions}
+							onClick={() => handleUpdateComment(comment.id)}
 						/>
-					</div>
+						<FontAwesomeIcon
+							icon={faTrashAlt}
+							size="sm"
+							color={'gray'}
+							onClick={() => handleDeleteComment()}
+						/>
+					</Options>
 				)}
 			</Container>
 		</>
@@ -70,6 +71,10 @@ const Container = styled.div`
 	display: grid;
 	grid-template-columns: 1fr 10px;
 	margin: 1rem;
+`;
+
+const Options = styled.div`
+	cursor: pointer;
 `;
 
 const ContainerComment = styled.div`
