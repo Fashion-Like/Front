@@ -11,25 +11,27 @@ import Comment from '../components/Comment';
 import { updateComment } from '../../../services/CommentService';
 
 const Comments = ({ postId }) => {
-	const [dataComment, setDataComment] = useState({});
-	const [updateDataComment, setUpdteDataComment] = useState({});
+	console.log(postId, 'id comments');
+	const [dataComment, setDataComment] = useState({ postId: '', text: '' });
 	const [isEditComment, setIsEditComment] = useState(false);
 	const [commentId, setCommentId] = useState('');
 	const [editedComment, setEditedComment] = useState(false);
 
 	const dispatch = useDispatch();
 
-	let { comments } = useSelector((state) => state.comments);
 	useEffect(() => {
-		dispatch(getAllComments(postId));
+		postId && dispatch(getAllComments(postId));
 	}, [dispatch]);
+
+	let { comments } = useSelector((state) => state.comments);
+	console.log(comments, comments.length);
 
 	const handleTextComment = (e) => {
 		const comment = {
 			postId,
 			text: e.target.value,
 		};
-		!isEditComment ? setDataComment(comment) : setUpdteDataComment(comment);
+		setDataComment(comment);
 	};
 
 	const handleSaveComment = (e) => {
@@ -39,15 +41,18 @@ const Comments = ({ postId }) => {
 				dispatch(setNewComment(response));
 			});
 		} else {
-			updateComment(commentId, updateDataComment).then((response) => {
+			updateComment(commentId, dataComment).then((response) => {
 				setEditedComment(true);
 				dispatch(setUpdateComment(response));
 			});
 		}
+		e.target.reset();
 		setDataComment({});
 	};
 
 	const handleUpdateComment = (id) => {
+		const commentToUpdate = comments.filter((comment) => comment.id === id);
+		setDataComment({ text: commentToUpdate[0].text });
 		setIsEditComment(true);
 		setCommentId(id);
 	};
@@ -63,7 +68,9 @@ const Comments = ({ postId }) => {
 	return (
 		<Container>
 			<Scroll>
-				{comments.length > 0 ? (
+				{comments.length === 0 ? (
+					<WithOutComments>No hay comentarios, agrega uno..</WithOutComments>
+				) : (
 					comments.map((comment) => {
 						return (
 							<Comment
@@ -77,19 +84,17 @@ const Comments = ({ postId }) => {
 							/>
 						);
 					})
-				) : (
-					<WithOutComments>No hay comentarios, agrega uno...</WithOutComments>
 				)}
 			</Scroll>
 			<form onSubmit={handleSaveComment}>
 				<ContainerInput isEdit={isEditComment}>
 					<input
-						placeholder={
-							isEditComment ? 'Edita tu comentario...' : 'Escribe un comentario...'
-						}
+						placeholder={'Escribe un comentario...'}
 						ref={inputElement}
 						autoFocus
+						name="comment"
 						onChange={handleTextComment}
+						value={dataComment.text}
 					/>
 					<button type="submit" value="button">
 						Enviar
@@ -101,13 +106,24 @@ const Comments = ({ postId }) => {
 };
 
 const Container = styled.div`
-	margin: 0 1.5rem;
+	margin: 0 1rem;
+	@media (min-width: 800px) {
+		position: relative;
+	}
+	@media (max-width: 800px) {
+		grid-area: comments;
+	}
 `;
 
 const Scroll = styled.div`
 	overflow: auto;
-	max-height: 70vh;
-	min-height: 425px;
+	min-height: 75vh;
+	max-height: 80vh;
+
+	@media (min-width: 800px) {
+		min-height: 380px;
+		max-height: 53vh;
+	}
 
 	&::-webkit-scrollbar {
 		width: 6px;
@@ -131,12 +147,19 @@ const ContainerInput = styled.div`
 	border-radius: 30px;
 	border: solid 2px ${(props) => (props.isEdit ? 'rgba(82,168,236,.8)' : 'none')};
 	box-shadow: ${(props) => (props.isEdit ? '0 0 8px rgba(82,168,236,.6)' : 'none')};
+	width: 100%;
+
+	@media (min-width: 800px) {
+		position: absolute;
+		bottom: 10px;
+	}
 
 	& input {
 		font-size: inherit;
 		background-color: transparent;
 		padding-left: 5px;
 		border: 0;
+		width: 100%;
 		&:focus {
 			outline: none;
 		}
