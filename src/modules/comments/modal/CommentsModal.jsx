@@ -43,7 +43,7 @@ const ContainerModal = styled.div`
 
 const BodyModal = styled.div`
 	display: grid;
-	grid-template-columns: 2fr 1fr;
+	grid-template-columns: 2fr 1.5fr;
 `;
 
 export default CommentsModal;

@@ -64,8 +64,12 @@ const SectionPosts = ({
 	}
 
 	const handleNewComment = (post) => {
-		setIsOpenComment(true);
-		setdataComments(post);
+		if (window.innerWidth >= 800) {
+			setIsOpenComment(true);
+			setdataComments(post);
+		} else {
+			window.location.href = `/comments/${post.id}`;
+		}
 	};
 
 	return (

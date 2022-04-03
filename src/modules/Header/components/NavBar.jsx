@@ -11,8 +11,8 @@ const NavBar = ({ setNavBar }) => {
 		<nav>
 			<Nav onClick={closeNavBar}>
 				<span>¡Bienvenido!</span>
-				<span>{user.name}</span>
-				{user.name === 'Admin' && <a>Estadísticas</a>}
+				<span>{user?.name}</span>
+				{user?.name === 'Admin' && <a href="/statistics">Estadísticas</a>}
 				<a onClick={logout}>Salir</a>
 			</Nav>
 		</nav>
@@ -37,6 +37,7 @@ const Nav = styled.div`
 	& a {
 		display: block;
 		padding: 0.7rem;
+		color: black;
 		cursor: pointer;
 
 		&: hover {

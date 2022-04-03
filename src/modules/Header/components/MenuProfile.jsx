@@ -29,6 +29,7 @@ const MenuProfile = () => {
 			<FontAwesomeIcon
 				icon={faCaretDown}
 				size="lg"
+				style={{ cursor: 'pointer' }}
 				color={'gray'}
 				onClick={() => setNavBar(true)}
 			/>
