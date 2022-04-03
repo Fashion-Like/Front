@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 import IconComments from '../../../assets/images/icon-comments.png';
-import { deletePost, getTags, reactToPost } from '../../../services/PostService';
+import {
+	deletePost,
+	getTags,
+	reactToPost,
+} from '../../../services/PostService';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -25,7 +29,7 @@ const SectionPost = ({
 	const [isOpenModalDelete, setIsOpenModalDelete] = useState(false);
 	const [isOpenModalComments, setIsOpenModalComments] = useState(false);
 	const [prevPost, setPrevPost] = useState({});
-	const [statusLike, setStatusLike] = useState(false);
+
 	const [currentPost, setCurrentPost] = useState({});
 
 	const user = JSON.parse(localStorage.getItem('user'));
@@ -64,7 +68,9 @@ const SectionPost = ({
 	isOpenModal && getAllTags();
 
 	if (category) {
-		posts = posts.filter((post) => post.tags[post.tags.length - 1] === category);
+		posts = posts.filter(
+			(post) => post.tags[post.tags.length - 1] === category
+		);
 	}
 
 	if (search) {
@@ -75,18 +81,6 @@ const SectionPost = ({
 			);
 		});
 	}
-
-	const handleLike = async (post) => {
-		setStatusLike(!statusLike);
-		const data = {
-			postId: post.id,
-			reactionType: statusLike ? 1 : 2,
-		};
-		reactToPost(data).then((response) => {
-			console.log(response);
-			dispatch(setUpdatePost({ ...post, userReaction: response.reactionType }));
-		});
-	};
 
 	const handleNewComment = () => {
 		setIsOpenModalComments(true);
@@ -113,7 +107,11 @@ const SectionPost = ({
 							height: '40px',
 						}}
 					>
-						<img style={{ width: '20px' }} src={IconComments} alt="icon_comments" />
+						<img
+							style={{ width: '20px' }}
+							src={IconComments}
+							alt="icon_comments"
+						/>
 						<Title>Publicaciones</Title>
 					</div>
 				</div>
@@ -137,7 +135,13 @@ const SectionPost = ({
 						</div>
 					))
 				) : (
-					<p style={{ textAlign: 'center', marginTop: '2rem', fontSize: '1.5rem' }}>
+					<p
+						style={{
+							textAlign: 'center',
+							marginTop: '2rem',
+							fontSize: '1.5rem',
+						}}
+					>
 						{' '}
 						No hay publicaciones para mostrar...{' '}
 					</p>

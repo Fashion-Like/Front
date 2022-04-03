@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import BaseButton from '../../../ui/BaseButton';
 import Input from '../../../ui/Input';
 import BaseLogo from '../../../ui/BaseLogo';
-import { FormBox } from '../../../assets/css/styledForm';
+import { FormBox, InputWidth } from '../../../assets/css/styledForm';
 import { useUser } from '../../../hooks/useUser';
 import { useState } from 'react';
 import { setAccessToken } from '../../../stores/AccessTokenStore';
@@ -73,12 +73,28 @@ const LoginForm = () => {
 		password: '',
 	});
 
+	//Estado de la contraseña
+	const [statePassword, setStatePassword] = useState(true);
+
 	const [isError, setIsError] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
 
 	const isValid = () => {
 		const { errors } = state;
 		return !Object.keys(errors).some((error) => errors[error]);
+	};
+
+	const showPassword = () => {
+		if (document.getElementById('password').type === 'password') {
+			document.getElementById('password').type = 'text';
+
+			setStatePassword(false);
+		} else {
+			document.getElementById('password').type === 'text';
+			document.getElementById('password').type = 'password';
+
+			setStatePassword(true);
+		}
 	};
 
 	const onSubmit = (e) => {
@@ -98,7 +114,9 @@ const LoginForm = () => {
 								};
 								localStorage.setItem('user', JSON.stringify(user));
 								doLogin(user);
-								history('/');
+								history('/', {
+									replace: true,
+								});
 							})
 							.catch((e) => {
 								console.log(e);
@@ -106,21 +124,13 @@ const LoginForm = () => {
 								setErrorMessage('Correo o contraseña inválidos');
 							});
 					}
-					setIsError(true), setErrorMessage('Este correo no está registrado');
+					setIsError(true),
+						setErrorMessage('Este correo no está registrado');
 				})
 				.catch((e) => {
 					console.log(e);
 				});
 		}
-	};
-
-	const showLastCharacter = (characters) => {
-		let result = '';
-		const num = characters.length - 1;
-		for (let i = 0; i < num; i++) {
-			result += '•';
-		}
-		return result + characters.slice(num);
 	};
 
 	const onChange = (e) => {
@@ -138,17 +148,6 @@ const LoginForm = () => {
 						: validators[name](value),
 				},
 			}));
-		}
-		if (name === 'password') {
-			const time =
-				value === state.fields[name].slice(0, value.length)
-					? displayLastCharDeleting
-					: displayLastChar;
-			setShowing({ [name]: showLastCharacter(value), [`active${name}`]: true });
-			setTimeout(() => {
-				setShowing({ ...showing, [`active${name}`]: false });
-				document.getElementById(name).focus();
-			}, time);
 		}
 	};
 
@@ -194,19 +193,35 @@ const LoginForm = () => {
 						message={touched.email && errors.email}
 						isvalid={errors.email}
 					/>
-					<Input
-						id={'password'}
-						label="Contraseña"
-						type={showing.activepassword ? 'text' : 'password'}
-						name="password"
-						value={password}
-						disabled={showing.activepassword}
-						onChange={onChange}
-						onBlur={onBlur}
-						onFocus={onFocus}
-						message={touched.password && errors.password}
-						isvalid={errors.password}
-					/>
+
+					<div className="input-group mb-3 d-flex align-items-center ">
+						<InputWidth>
+							<Input
+								label="contraseña"
+								className="form-control "
+								id={'password'}
+								type={showing.activepassword ? 'text' : 'password'}
+								name="password"
+								value={password}
+								/*disabled={showing.activepassword}*/
+								onChange={onChange}
+								onBlur={onBlur}
+								onFocus={onFocus}
+								isvalid={errors.password}
+							/>
+						</InputWidth>
+						<div className="input-group-append">
+							<i
+								onClick={showPassword}
+								id="eye"
+								className={
+									statePassword
+										? 'fa-solid fa-eye-slash btn btn-outline-secondary mb-2 '
+										: 'fa-solid fa-eye btn btn-outline-secondary mb-2'
+								}
+							></i>
+						</div>
+					</div>
 
 					{isError && <Error message={errorMessage} />}
 
@@ -230,7 +245,11 @@ const LoginForm = () => {
 						</Link>
 					</p>
 
-					<BaseButton type="submit" text="INICIAR SESIÓN" disabled={isValid()} />
+					<BaseButton
+						type="submit"
+						text="INICIAR SESIÓN"
+						disabled={isValid()}
+					/>
 					<Link
 						style={{
 							display: 'block',

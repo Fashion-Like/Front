@@ -10,7 +10,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import Comment from '../components/Comment';
 
 const Comments = ({ postId }) => {
-	const [dataComment, setDataComment] = useState({});
+	const [dataComment, setDataComment] = useState({
+		text: '',
+	});
+
+	const { text } = dataComment;
 
 	const dispatch = useDispatch();
 
@@ -23,7 +27,7 @@ const Comments = ({ postId }) => {
 	const handleTextComment = (e) => {
 		const comment = {
 			postId,
-			text: e.target.value,
+			[e.target.name]: e.target.value,
 		};
 		setDataComment(comment);
 	};
@@ -32,6 +36,9 @@ const Comments = ({ postId }) => {
 		e.preventDefault();
 		createComment(dataComment).then((response) => {
 			dispatch(setNewComment(response));
+		});
+		setDataComment({
+			text: '',
 		});
 	};
 
@@ -43,12 +50,19 @@ const Comments = ({ postId }) => {
 						return <Comment key={comment.id} comment={comment} />;
 					})
 				) : (
-					<WithOutComments>No hay comentarios, agrega uno...</WithOutComments>
+					<WithOutComments>
+						No hay comentarios, agrega uno...
+					</WithOutComments>
 				)}
 			</Scroll>
 			<form onSubmit={handleSaveComment}>
 				<ContainerInput>
-					<input placeholder="Escribe un comentario..." onChange={handleTextComment} />
+					<input
+						placeholder="Escribe un comentario..."
+						onChange={handleTextComment}
+						name="text"
+						value={text}
+					/>
 					<button type="submit" value="button">
 						Enviar
 					</button>

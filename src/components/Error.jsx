@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const ErrorMessage = styled.div`
 	display: block;
 	color: #cb3234;
-	margin: 1rem;
+	padding: 1rem;
 	text-align: center;
 `;
 

@@ -9,8 +9,23 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TAGS } from '../../../constants.js/tags';
+import { useState } from 'react';
+import { setUpdatePost } from '../../../stores/slices/posts';
+import { reactToPost } from '../../../services/PostService';
+import { useDispatch } from 'react-redux';
+const Post = ({
+	post,
+	handleDeletePost,
+	handleNewComment,
+	handleEditPost,
+}) => {
+	console.log(post);
+	const dispatch = useDispatch();
 
-const Post = ({ post, handleDeletePost, handleNewComment, handleEditPost }) => {
+	const [statusLike, setStatusLike] = useState(0);
+	const [like, setLike] = useState(false);
+	const [disLike, setDisLike] = useState(false);
+
 	const user = JSON.parse(localStorage.getItem('user'));
 	const formatDate = (date) => {
 		const newDate = new Date(date);
@@ -20,6 +35,69 @@ const Post = ({ post, handleDeletePost, handleNewComment, handleEditPost }) => {
 		};
 		return new Intl.DateTimeFormat('es', options).format(newDate);
 	};
+
+	const postLike = async (post) => {
+		if (like === false) {
+			setLike(true);
+			setDisLike(false);
+			const data = {
+				postId: post.id,
+				reactionType: 1,
+			};
+
+			reactToPost(data).then((response) => {
+				console.log(response);
+				dispatch(
+					setUpdatePost({ ...post, userReaction: response.reactionType })
+				);
+			});
+		} else {
+			setLike(false);
+			const data = {
+				postId: post.id,
+				reactionType: 0,
+			};
+
+			reactToPost(data).then((response) => {
+				console.log(response);
+				dispatch(
+					setUpdatePost({ ...post, userReaction: response.reactionType })
+				);
+			});
+		}
+	};
+
+	const postDisLike = (post) => {
+		if (disLike === false) {
+			setDisLike(true);
+			setLike(false);
+			const data = {
+				postId: post.id,
+				reactionType: 2,
+			};
+
+			reactToPost(data).then((response) => {
+				console.log(response);
+				dispatch(
+					setUpdatePost({ ...post, userReaction: response.reactionType })
+				);
+			});
+		} else {
+			setDisLike(false);
+			const data = {
+				postId: post.id,
+				reactionType: 0,
+			};
+
+			reactToPost(data).then((response) => {
+				console.log(response);
+				dispatch(
+					setUpdatePost({ ...post, userReaction: response.reactionType })
+				);
+			});
+		}
+	};
+
 	return (
 		<Container>
 			<HeaderPost>
@@ -32,7 +110,8 @@ const Post = ({ post, handleDeletePost, handleNewComment, handleEditPost }) => {
 				</DatePost>
 				<TagCategory
 					color={TAGS.map(
-						(tag) => tag.value === post.tags[post.tags.length - 1] && tag.color,
+						(tag) =>
+							tag.value === post.tags[post.tags.length - 1] && tag.color
 					)}
 				>
 					{post.tags[post.tags.length - 1]}
@@ -42,8 +121,32 @@ const Post = ({ post, handleDeletePost, handleNewComment, handleEditPost }) => {
 			<ImgPost src={post.pictureUrl} alt="imagen-producto" />
 			<Flex>
 				<Flex style={{ cursor: 'pointer' }}>
-					<FontAwesomeIcon icon={faThumbsUp} size="lg" color={'gray'} />
-					<FontAwesomeIcon icon={faThumbsDown} size="lg" color={'gray'} />
+					{like || post.userReaction == 1 ? (
+						<i
+							className="fa-solid fa-thumbs-up fs-5"
+							onClick={() => postLike(post)}
+						></i>
+					) : (
+						<FontAwesomeIcon
+							icon={faThumbsUp}
+							size="lg"
+							color={'gray'}
+							onClick={() => postLike(post)}
+						/>
+					)}
+					{disLike || post.userReaction == 2 ? (
+						<i
+							className="fa-solid fa-thumbs-down fs-5"
+							onClick={() => postDisLike(post)}
+						></i>
+					) : (
+						<FontAwesomeIcon
+							icon={faThumbsDown}
+							size="lg"
+							color={'gray'}
+							onClick={() => postDisLike(post)}
+						/>
+					)}
 					<FontAwesomeIcon
 						icon={faCommentAlt}
 						size="lg"
