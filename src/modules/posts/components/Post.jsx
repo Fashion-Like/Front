@@ -15,7 +15,7 @@ const Post = ({ post, handleDeletePost, handleEditPost, handleNewComment, origin
 	const user = JSON.parse(localStorage.getItem('user'));
 
 	return (
-		<ContainerPost>
+		<ContainerPost origin={origin}>
 			<HeaderPost>
 				<DatePost>
 					<img src={LogoPost} alt="logo_fashion_like" />
@@ -47,7 +47,7 @@ const Post = ({ post, handleDeletePost, handleEditPost, handleNewComment, origin
 				</Flex>
 
 				<Flex>
-					{user.name === 'Admin' && (
+					{user?.name === 'Admin' && (
 						<FontAwesomeIcon
 							icon={faEdit}
 							size="lg"
@@ -56,7 +56,7 @@ const Post = ({ post, handleDeletePost, handleEditPost, handleNewComment, origin
 						/>
 					)}
 
-					{user.name === 'Admin' && (
+					{user?.name === 'Admin' && (
 						<FontAwesomeIcon
 							icon={faTrashAlt}
 							size="lg"
@@ -76,7 +76,12 @@ const ContainerPost = styled.div`
 	padding: 1rem 1.5rem;
 	background: #ffffff;
 	border-radius: 10px;
-	margin: 0.5rem 1.5rem;
+	max-width: 99vw;
+	margin: 0.5rem 0rem;
+	max-height: ${(props) => (props.origin === 'comments' ? '500px' : 'auto')};
+	@media (min-width: 1120px) {
+		margin: 0.5rem 1.5rem;
+	}
 `;
 
 const HeaderPost = styled.div`
@@ -90,6 +95,9 @@ const DatePost = styled.div`
 	display: flex;
 	gap: 0.5rem;
 	align-items: center;
+	& span {
+		color: gray;
+	}
 `;
 
 const TagCategory = styled.span`
@@ -104,8 +112,8 @@ const ImgPost = styled.img`
 	max-height: 80vh;
 	margin-bottom: 1.25rem;
 
-	@media (min-width: 1024px) {
-		max-height: ${(props) => (props.origin === 'comments' ? '200px' : '50vh')};
+	@media (min-width: 768px) {
+		max-height: ${(props) => (props.origin === 'comments' ? '250px' : '50vh')};
 	}
 `;
 
@@ -113,8 +121,11 @@ const Flex = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	gap: 3rem;
+	gap: 1.5rem;
 	cursor: pointer;
+	@media (min-width: 1120px) {
+		gap: 3rem;
+	}
 `;
 
 const DescriptionPost = styled.p`
