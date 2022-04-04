@@ -1,7 +1,8 @@
 import { Provider } from 'react-redux';
 import store from '../stores/index';
-import { CommentsChart } from '../modules/charts/CommentsChart';
 import { TotalUsersChart } from '../modules/charts/TotalUsersChart';
+import { TotalLikesChart } from '../modules/charts/TotalLikeChart';
+import { TotalDislikesChart } from '../modules/charts/TotalDislikeChart';
 import Header from '../modules/Header/sections/Header';
 import GlobalStyle from '../assets/css/globalStyles';
 import styled from 'styled-components';
@@ -19,8 +20,8 @@ const Statistics = () => {
 						<div>
 							<GeneralStatistics>
 								<TotalUsersChart />
-								<TotalUsersChart />
-								<TotalUsersChart />
+								<TotalLikesChart />
+								<TotalDislikesChart />
 							</GeneralStatistics>
 						</div>
 
