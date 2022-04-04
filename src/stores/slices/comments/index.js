@@ -13,8 +13,19 @@ export const commentsSlice = createSlice({
 		setNewComment: (state, action) => {
 			return {
 				...state,
-				comments: [action.payload, ...state.comments],
+				comments: [...state.comments, action.payload],
 			};
+		},
+		setDeleteComment: (state, action) => {
+			state.comments = state.comments.filter((item) => item.id !== action.payload.id);
+		},
+		setUpdateComment: (state, action) => {
+			state.comments = state.comments.map((item) => {
+				if (item.id === action.payload.id) {
+					return (item = action.payload);
+				}
+				return item;
+			});
 		},
 	},
 });
@@ -27,6 +38,7 @@ export const getAllComments = (postId) => (dispatch) => {
 		.catch((error) => console.log(error));
 };
 
-export const { setComments, setNewComment } = commentsSlice.actions;
+export const { setComments, setNewComment, setDeleteComment, setUpdateComment } =
+	commentsSlice.actions;
 
 export default commentsSlice.reducer;

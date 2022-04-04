@@ -1,7 +1,6 @@
 import { faCaretDown, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
-// import { logout } from '../../../stores/AccessTokenStore';
 import { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import { faBuilding } from '@fortawesome/free-regular-svg-icons';
@@ -30,6 +29,7 @@ const MenuProfile = () => {
 			<FontAwesomeIcon
 				icon={faCaretDown}
 				size="lg"
+				style={{ cursor: 'pointer' }}
 				color={'gray'}
 				onClick={() => setNavBar(true)}
 			/>

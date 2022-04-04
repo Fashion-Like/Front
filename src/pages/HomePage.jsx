@@ -50,8 +50,16 @@ const HomePage = () => {
 };
 
 const GridLayout = styled.div`
-	@media (min-width: 1120px) {
-		display: grid;
+	display: grid;
+	grid-template-areas:
+		'header header header'
+		'. . .'
+		'. categories .'
+		'. . .'
+		'. posts .';
+	grid-template-rows: 8vh 5vh 20vh 2vh 70vh;
+	grid-template-columns: 1% 97% 2%;
+	@media (min-width: 768px) {
 		grid-template-columns: 2% 20% 5% 46% 5% 20% 2%;
 		grid-template-areas:
 			'header header header header header header header'
@@ -67,7 +75,7 @@ const Posts = styled.div`
 const Banners = styled.div`
 	grid-area: banners;
 	display: none;
-	@media (min-width: 1120px) {
+	@media (min-width: 800px) {
 		display: flex;
 		gap: 2rem;
 		flex-direction: column;

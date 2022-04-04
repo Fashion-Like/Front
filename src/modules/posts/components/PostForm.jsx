@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import BaseButton from '../../../ui/BaseButton';
 import LogoPost from '../../../assets/images/logomobile.svg';
@@ -132,7 +132,7 @@ const PostForm = ({ setIsOpenModal, prevPost, isEdit, setIsEdit }) => {
 		<div>
 			<HeaderPost>
 				<DatePost>
-					<img src={LogoPost} alt="logo_fashion_like" style={{ width: '30px' }} />
+					<img src={LogoPost} alt="logo_fashion_like" />
 					<div>
 						<h4>Fashion Like</h4>
 					</div>
@@ -154,23 +154,9 @@ const PostForm = ({ setIsOpenModal, prevPost, isEdit, setIsEdit }) => {
 				/>
 				<Icons>
 					<span>{fileName && cutFileName(fileName)}</span>
-					<label
-						htmlFor="selectFile"
-						style={{
-							background: 'transparent',
-							border: 'none',
-							cursor: 'pointer',
-						}}
-					>
+					<label htmlFor="selectFile">
 						<FontAwesomeIcon icon={faImage} size="lg" color={'gray'} />
-
-						<input
-							id="selectFile"
-							type="file"
-							onChange={handleImage}
-							accept="image/*"
-							style={{ display: 'none' }}
-						/>
+						<input id="selectFile" type="file" onChange={handleImage} accept="image/*" />
 					</label>
 
 					<FontAwesomeIcon
@@ -240,6 +226,9 @@ const DatePost = styled.div`
 	gap: 0.5rem;
 	align-items: center;
 	font-size: 14px;
+	& img {
+		width: 30px;
+	}
 `;
 
 const Form = styled.form`
@@ -255,6 +244,14 @@ const Icons = styled.div`
 	margin-bottom: 1rem;
 	cursor: pointer;
 	z-index: 1;
+	& label {
+		background: transparent;
+		border: none;
+		cursor: pointer;
+		& input {
+			display: none;
+		}
+	}
 `;
 
 export default PostForm;

@@ -11,28 +11,27 @@ import {
 	getAllPosts,
 	setDeletePost,
 	setPostById,
-	setUpdatePost,
 } from '../../../stores/slices/posts';
-import NewPostModal from '../../posts/modal/NewPostModal';
+import NewPostModal from '../modal/NewPostModal';
 import ModalConfirmDelete from '../modal/ModalConfirmDelete';
-import CommentsModal from '../../../modules/comments/modal/CommentsModal';
 import Post from '../components/Post';
+import CommentsModal from '../../comments/modal/CommentsModal';
+import Title from '../components/Title';
+import WithoutPublications from '../components/WithoutPublications';
 
-const SectionPost = ({
+const SectionPosts = ({
 	category,
 	search,
 	setIsOpenModal,
-	isOpenModal,
 	setIsEdit,
 	isEdit,
+	isOpenModal,
 }) => {
 	const [isOpenModalDelete, setIsOpenModalDelete] = useState(false);
-	const [isOpenModalComments, setIsOpenModalComments] = useState(false);
 	const [prevPost, setPrevPost] = useState({});
-
 	const [currentPost, setCurrentPost] = useState({});
-
-	const user = JSON.parse(localStorage.getItem('user'));
+	const [isOpenComment, setIsOpenComment] = useState(false);
+	const [dataComments, setdataComments] = useState({});
 
 	const title = isEdit ? 'Editar publicación' : 'Crear publicación';
 
@@ -59,13 +58,6 @@ const SectionPost = ({
 		setPrevPost(dispatch(setPostById(post)));
 		setIsOpenModal(true);
 	};
-
-	const getAllTags = async () => {
-		const allTags = await getTags();
-		console.log(allTags);
-	};
-
-	isOpenModal && getAllTags();
 
 	if (category) {
 		posts = posts.filter(
@@ -117,22 +109,13 @@ const SectionPost = ({
 				</div>
 				{posts?.length > 0 ? (
 					posts.map((post) => (
-						<div key={post.id}>
-							<Post
-								post={post}
-								handleEditPost={handleEditPost}
-								handleNewComment={handleNewComment}
-								handleDeletePost={handleDeletePost}
-							/>
-							{isOpenModalComments && (
-								<CommentsModal
-									key={post.id}
-									isOpenModal={isOpenModalComments}
-									setIsOpenModal={setIsOpenModalComments}
-									post={post}
-								/>
-							)}
-						</div>
+						<Post
+							key={post.id}
+							post={post}
+							handleEditPost={handleEditPost}
+							handleDeletePost={handleDeletePost}
+							handleNewComment={() => handleNewComment(post)}
+						/>
 					))
 				) : (
 					<p
@@ -166,6 +149,13 @@ const SectionPost = ({
 						currentPost={currentPost}
 					/>
 				)}
+				{isOpenComment && (
+					<CommentsModal
+						setIsOpenModal={setIsOpenComment}
+						isOpenModal={isOpenComment}
+						post={dataComments}
+					/>
+				)}
 			</Container>
 		)
 	);
@@ -175,9 +165,11 @@ const Container = styled.div`
 	padding: 1rem 1.5rem;
 `;
 
-const Title = styled.h2`
-	color: #354a62;
-	font-size: 1rem;
+const Divider = styled.div`
+	width: 130px;
+	height: 1px;
+	background: #354a62;
+	margin: 1rem 0;
 `;
 
-export default SectionPost;
+export default SectionPosts;
