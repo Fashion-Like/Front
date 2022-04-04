@@ -1,34 +1,34 @@
 import { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
-import { getUserStatistics } from '../../services/StatisticsService';
+import { getDislikeStatistics } from '../../services/StatisticsService';
 
-export const TotalUsersChart = () => {
-	const [users, setUsers] = useState([]);
+export const TotalDislikesChart = () => {
+	const [dislikes, setDislikes] = useState([]);
 
-	const getTotalUsers = async () => {
+	const getTotalDislikes = async () => {
 		try {
-			const totalUser = await getUserStatistics();
-			return totalUser;
+			const totalDislikes = await getDislikeStatistics();
+			return totalDislikes;
 		} catch (error) {
 			console.log(error);
 		}
 	};
 	useEffect(() => {
-		const readTotalUsers = async () => {
-			const allUsers = await getTotalUsers();
-			allUsers && setUsers(allUsers);
+		const readTotalDislikes = async () => {
+			const allDislikes = await getTotalDislikes();
+			allDislikes && setDislikes(allDislikes);
 		};
-		readTotalUsers();
+		readTotalDislikes();
 	}, []);
 
-	const dateData = users.map((item) => item.date);
-	const userData = users.map((item) => item.count);
-	const totalUsers = userData.reduce((prev, current) => prev + current, 0);
+	const dateData = dislikes.map((item) => item.date);
+	const dislikeData = dislikes.map((item) => item.count);
+	const totalDislikes = dislikeData.reduce((prev, current) => prev + current, 0);
 
 	const series = [
 		{
 			name: 'Usuarios registrados',
-			data: userData,
+			data: dislikeData,
 		},
 	];
 	const options = {
@@ -43,7 +43,7 @@ export const TotalUsersChart = () => {
 			categories: dateData,
 		},
 		title: {
-			text: `${totalUsers} Usuarios`,
+			text: `${totalDislikes} No me gusta`,
 			offsetX: 30,
 			style: {
 				fontSize: '24px',

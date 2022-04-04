@@ -1,34 +1,34 @@
 import { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
-import { getUserStatistics } from '../../services/StatisticsService';
+import { getLikeStatistics } from '../../services/StatisticsService';
 
-export const TotalUsersChart = () => {
-	const [users, setUsers] = useState([]);
+export const TotalLikesChart = () => {
+	const [likes, setLikes] = useState([]);
 
-	const getTotalUsers = async () => {
+	const getTotalLikes = async () => {
 		try {
-			const totalUser = await getUserStatistics();
-			return totalUser;
+			const totalLikes = await getLikeStatistics();
+			return totalLikes;
 		} catch (error) {
 			console.log(error);
 		}
 	};
 	useEffect(() => {
-		const readTotalUsers = async () => {
-			const allUsers = await getTotalUsers();
-			allUsers && setUsers(allUsers);
+		const readTotalLikes = async () => {
+			const allLikes = await getTotalLikes();
+			allLikes && setLikes(allLikes);
 		};
-		readTotalUsers();
+		readTotalLikes();
 	}, []);
 
-	const dateData = users.map((item) => item.date);
-	const userData = users.map((item) => item.count);
-	const totalUsers = userData.reduce((prev, current) => prev + current, 0);
+	const dateData = likes.map((item) => item.date);
+	const likeData = likes.map((item) => item.count);
+	const totalLikes = likeData.reduce((prev, current) => prev + current, 0);
 
 	const series = [
 		{
 			name: 'Usuarios registrados',
-			data: userData,
+			data: likeData,
 		},
 	];
 	const options = {
@@ -43,7 +43,7 @@ export const TotalUsersChart = () => {
 			categories: dateData,
 		},
 		title: {
-			text: `${totalUsers} Usuarios`,
+			text: `${totalLikes} Me gusta`,
 			offsetX: 30,
 			style: {
 				fontSize: '24px',
