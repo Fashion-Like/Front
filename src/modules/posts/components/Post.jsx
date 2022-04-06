@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import LogoPost from '../../../assets/images/logomobile.svg';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
@@ -9,32 +10,25 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TAGS } from '../../../constants.js/tags';
-import { useState } from 'react';
+import { formatDate } from '../../../helpers/FormatDate';
+
 import { setUpdatePost } from '../../../stores/slices/posts';
 import { reactToPost } from '../../../services/PostService';
 import { useDispatch } from 'react-redux';
+
 const Post = ({
 	post,
 	handleDeletePost,
 	handleNewComment,
 	handleEditPost,
+	origin,
+	totalComments,
 }) => {
-	console.log(post);
-	const dispatch = useDispatch();
-
-	const [statusLike, setStatusLike] = useState(0);
 	const [like, setLike] = useState(false);
 	const [disLike, setDisLike] = useState(false);
 
+	const dispatch = useDispatch();
 	const user = JSON.parse(localStorage.getItem('user'));
-	const formatDate = (date) => {
-		const newDate = new Date(date);
-		const options = {
-			month: 'long',
-			day: '2-digit',
-		};
-		return new Intl.DateTimeFormat('es', options).format(newDate);
-	};
 
 	const postLike = async (post) => {
 		if (like === false) {
@@ -46,10 +40,7 @@ const Post = ({
 			};
 
 			reactToPost(data).then((response) => {
-				console.log(response);
-				dispatch(
-					setUpdatePost({ ...post, userReaction: response.reactionType })
-				);
+				dispatch(setUpdatePost({ ...post, userReaction: response.reactionType }));
 			});
 		} else {
 			setLike(false);
@@ -59,10 +50,7 @@ const Post = ({
 			};
 
 			reactToPost(data).then((response) => {
-				console.log(response);
-				dispatch(
-					setUpdatePost({ ...post, userReaction: response.reactionType })
-				);
+				dispatch(setUpdatePost({ ...post, userReaction: response.reactionType }));
 			});
 		}
 	};
@@ -78,9 +66,7 @@ const Post = ({
 
 			reactToPost(data).then((response) => {
 				console.log(response);
-				dispatch(
-					setUpdatePost({ ...post, userReaction: response.reactionType })
-				);
+				dispatch(setUpdatePost({ ...post, userReaction: response.reactionType }));
 			});
 		} else {
 			setDisLike(false);
@@ -91,9 +77,7 @@ const Post = ({
 
 			reactToPost(data).then((response) => {
 				console.log(response);
-				dispatch(
-					setUpdatePost({ ...post, userReaction: response.reactionType })
-				);
+				dispatch(setUpdatePost({ ...post, userReaction: response.reactionType }));
 			});
 		}
 	};
@@ -110,26 +94,18 @@ const Post = ({
 				</DatePost>
 				<TagCategory
 					color={TAGS.map(
-						(tag) =>
-							tag.value === post.tags[post.tags.length - 1] && tag.color
+						(tag) => tag.value === post.tags[post.tags.length - 1] && tag.color,
 					)}
 				>
 					{post.tags[post.tags.length - 1]}
 				</TagCategory>
 			</HeaderPost>
 			<DescriptionPost>{post.description}</DescriptionPost>
-			<ImgPost
-				src={post.pictureUrl}
-				alt="imagen-producto"
-				origin={origin}
-			/>
+			<ImgPost src={post.pictureUrl} alt="imagen-producto" origin={origin} />
 			<Flex>
-				<Flex style={{ cursor: 'pointer' }}>
+				<Flex>
 					{like || post.userReaction == 1 ? (
-						<i
-							className="fa-solid fa-thumbs-up fs-5"
-							onClick={() => postLike(post)}
-						></i>
+						<i className="fa-solid fa-thumbs-up fs-5" onClick={() => postLike(post)}></i>
 					) : (
 						<FontAwesomeIcon
 							icon={faThumbsUp}
@@ -151,12 +127,15 @@ const Post = ({
 							onClick={() => postDisLike(post)}
 						/>
 					)}
-					<FontAwesomeIcon
-						icon={faCommentAlt}
-						size="lg"
-						color={'gray'}
-						onClick={() => handleNewComment(post.id)}
-					/>
+					<div>
+						<FontAwesomeIcon
+							icon={faCommentAlt}
+							size="lg"
+							color={'gray'}
+							onClick={() => handleNewComment(post.id)}
+						/>
+						<span>{totalComments}</span>
+					</div>
 				</Flex>
 
 				<Flex>
@@ -191,8 +170,7 @@ const ContainerPost = styled.div`
 	border-radius: 10px;
 	max-width: 99vw;
 	margin: 0.5rem 0rem;
-	max-height: ${(props) =>
-		props.origin === 'comments' ? '500px' : 'auto'};
+	max-height: ${(props) => (props.origin === 'comments' ? '500px' : 'auto')};
 	@media (min-width: 1120px) {
 		margin: 0.5rem 1.5rem;
 	}
@@ -227,8 +205,7 @@ const ImgPost = styled.img`
 	margin-bottom: 1.25rem;
 
 	@media (min-width: 768px) {
-		max-height: ${(props) =>
-			props.origin === 'comments' ? '250px' : '50vh'};
+		max-height: ${(props) => (props.origin === 'comments' ? '250px' : '50vh')};
 	}
 `;
 

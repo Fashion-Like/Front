@@ -1,17 +1,8 @@
 import styled from 'styled-components';
-import IconComments from '../../../assets/images/icon-comments.png';
-import {
-	deletePost,
-	getTags,
-	reactToPost,
-} from '../../../services/PostService';
+import { deletePost } from '../../../services/PostService';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-	getAllPosts,
-	setDeletePost,
-	setPostById,
-} from '../../../stores/slices/posts';
+import { getAllPosts, setDeletePost, setPostById } from '../../../stores/slices/posts';
 import NewPostModal from '../modal/NewPostModal';
 import ModalConfirmDelete from '../modal/ModalConfirmDelete';
 import Post from '../components/Post';
@@ -60,9 +51,7 @@ const SectionPosts = ({
 	};
 
 	if (category) {
-		posts = posts.filter(
-			(post) => post.tags[post.tags.length - 1] === category
-		);
+		posts = posts.filter((post) => post.tags[post.tags.length - 1] === category);
 	}
 
 	if (search) {
@@ -74,39 +63,20 @@ const SectionPosts = ({
 		});
 	}
 
-	const handleNewComment = () => {
-		setIsOpenModalComments(true);
-		console.log('commentario');
+	const handleNewComment = (post) => {
+		if (window.innerWidth >= 800) {
+			setIsOpenComment(true);
+			setdataComments(post);
+		} else {
+			window.location.href = `/comments/${post.id}`;
+		}
 	};
 
 	return (
 		posts && (
 			<Container>
-				<div
-					style={{
-						display: 'flex',
-						alignItems: 'center',
-						justifyContent: 'space-between',
-						marginBottom: '1rem',
-					}}
-				>
-					<div
-						style={{
-							display: 'flex',
-							gap: '.5rem',
-							alignItems: 'center',
-							borderBottom: 'solid 1px #354A62',
-							height: '40px',
-						}}
-					>
-						<img
-							style={{ width: '20px' }}
-							src={IconComments}
-							alt="icon_comments"
-						/>
-						<Title>Publicaciones</Title>
-					</div>
-				</div>
+				<Title title={'Publicaciones'} />
+				<Divider />
 				{posts?.length > 0 ? (
 					posts.map((post) => (
 						<Post
@@ -118,16 +88,7 @@ const SectionPosts = ({
 						/>
 					))
 				) : (
-					<p
-						style={{
-							textAlign: 'center',
-							marginTop: '2rem',
-							fontSize: '1.5rem',
-						}}
-					>
-						{' '}
-						No hay publicaciones para mostrar...{' '}
-					</p>
+					<WithoutPublications />
 				)}
 				{isOpenModal && (
 					<NewPostModal
