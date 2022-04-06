@@ -11,19 +11,10 @@ import Comment from '../components/Comment';
 import { updateComment } from '../../../services/CommentService';
 
 const Comments = ({ postId }) => {
-<<<<<<< HEAD
-	const [dataComment, setDataComment] = useState({
-		text: '',
-	});
-
-	const { text } = dataComment;
-=======
-	console.log(postId, 'id comments');
 	const [dataComment, setDataComment] = useState({ postId: '', text: '' });
 	const [isEditComment, setIsEditComment] = useState(false);
 	const [commentId, setCommentId] = useState('');
 	const [editedComment, setEditedComment] = useState(false);
->>>>>>> 877d0886389a81cd1e384ae3223dff750a8ab498
 
 	const dispatch = useDispatch();
 
@@ -32,26 +23,17 @@ const Comments = ({ postId }) => {
 	}, [dispatch]);
 
 	let { comments } = useSelector((state) => state.comments);
-	console.log(comments, comments.length);
 
 	const handleTextComment = (e) => {
 		const comment = {
 			postId,
-			[e.target.name]: e.target.value,
+			text: e.target.value,
 		};
 		setDataComment(comment);
 	};
 
 	const handleSaveComment = (e) => {
 		e.preventDefault();
-<<<<<<< HEAD
-		createComment(dataComment).then((response) => {
-			dispatch(setNewComment(response));
-		});
-		setDataComment({
-			text: '',
-		});
-=======
 		if (!isEditComment) {
 			createComment(dataComment).then((response) => {
 				dispatch(setNewComment(response));
@@ -63,8 +45,7 @@ const Comments = ({ postId }) => {
 			});
 		}
 		e.target.reset();
-		setDataComment({});
->>>>>>> 877d0886389a81cd1e384ae3223dff750a8ab498
+		setDataComment({ postId: '', text: '' });
 	};
 
 	const handleUpdateComment = (id) => {
@@ -88,20 +69,6 @@ const Comments = ({ postId }) => {
 				{comments.length === 0 ? (
 					<WithOutComments>No hay comentarios, agrega uno..</WithOutComments>
 				) : (
-<<<<<<< HEAD
-					<WithOutComments>
-						No hay comentarios, agrega uno...
-					</WithOutComments>
-				)}
-			</Scroll>
-			<form onSubmit={handleSaveComment}>
-				<ContainerInput>
-					<input
-						placeholder="Escribe un comentario..."
-						onChange={handleTextComment}
-						name="text"
-						value={text}
-=======
 					comments.map((comment) => {
 						return (
 							<Comment
@@ -126,7 +93,6 @@ const Comments = ({ postId }) => {
 						name="comment"
 						onChange={handleTextComment}
 						value={dataComment.text}
->>>>>>> 877d0886389a81cd1e384ae3223dff750a8ab498
 					/>
 					<button type="submit" value="button">
 						Enviar
@@ -141,6 +107,7 @@ const Container = styled.div`
 	margin: 0 1rem;
 	@media (min-width: 800px) {
 		position: relative;
+		top: 15px;
 	}
 	@media (max-width: 800px) {
 		grid-area: comments;
@@ -151,12 +118,10 @@ const Scroll = styled.div`
 	overflow: auto;
 	min-height: 75vh;
 	max-height: 80vh;
-
 	@media (min-width: 800px) {
 		min-height: 380px;
-		max-height: 53vh;
+		max-height: 45vh;
 	}
-
 	&::-webkit-scrollbar {
 		width: 6px;
 	}
@@ -180,12 +145,10 @@ const ContainerInput = styled.div`
 	border: solid 2px ${(props) => (props.isEdit ? 'rgba(82,168,236,.8)' : 'none')};
 	box-shadow: ${(props) => (props.isEdit ? '0 0 8px rgba(82,168,236,.6)' : 'none')};
 	width: 100%;
-
 	@media (min-width: 800px) {
 		position: absolute;
 		bottom: 10px;
 	}
-
 	& input {
 		font-size: inherit;
 		background-color: transparent;

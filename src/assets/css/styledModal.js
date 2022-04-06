@@ -8,7 +8,7 @@ const Backdrop = styled.div`
 	left: 0;
 	background: rgba(0, 0, 0, 0.7);
 	padding: 40px;
-	z-index: 1;
+	z-index: 99999999999;
 	display: grid;
 	align-items: center;
 	justify-items: center;
